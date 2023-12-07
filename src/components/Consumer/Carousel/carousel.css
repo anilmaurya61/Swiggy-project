@@ -1,0 +1,26 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.carousel-container {
+    width: 100%;
+    padding: 0 5rem 0 5rem;
+}
+
+.offer-card-container {
+    height: 20rem;
+    display: flex;
+    gap: 1rem;
+    width: 100%;
+    overflow-x:scroll;
+    white-space: nowrap;
+    position: relative;
+}
+.offer-card-container::-webkit-scrollbar {
+    display: none; 
+}
+.offer-card-container img {
+    height: 100%;
+}

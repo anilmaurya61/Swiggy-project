@@ -1,0 +1,33 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.container{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 5rem;
+    width: 100%;
+    box-shadow: 0 0 10px 0 black;
+    padding: 0 5rem 0 5rem;
+}
+
+ul{
+    list-style: none;
+    display: flex;
+    justify-content: space-around;
+    width: 60%;
+}
+img{
+    height: 4rem;
+}
+.icon-text-container {
+    display: flex;
+    align-items: center;
+}
+
+.icon-text-container span {
+    margin-left: 8px;
+}
