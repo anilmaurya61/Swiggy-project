@@ -1,16 +1,18 @@
-import Header from './components/Consumer/Header/Header'
-import Carousel from './components/Consumer/Carousel/carousel'
-import Body from './components/Consumer/Body/body';
-import Footer
- from './components/Consumer/Footer/Footer';
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import ConsumerHome from './pages/consumer/Home';
+import RestaurantHome from './pages/restaurent/RestaurentHome';
+
 function App() {
   return (
-    <div className="App">
-      <Header/>
-      <Carousel/>
-      <Body/>
-      <Footer/>
-    </div>
+    <Router>
+      <div className="App">
+        <Routes>
+          <Route path="/" element={<ConsumerHome />} />
+          <Route path="/restaurantHome" element={<RestaurantHome />} />
+        </Routes>
+      </div>
+    </Router>
   );
 }
 

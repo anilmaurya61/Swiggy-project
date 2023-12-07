@@ -1,5 +1,37 @@
 import React, { useState, useEffect } from 'react';
-import './carousel.css';
+import styled from 'styled-components';
+
+const StyledCarouselContainer = styled.div`
+  width: 100%;
+  padding: 0 5rem 0 5rem;
+`;
+
+const StyledHeader = styled.div`
+  h1 {
+    margin: 0;
+    padding: 0;
+  }
+`;
+
+const StyledCarouselWrapper = styled.div`
+  .offer-card-container {
+    height: 20rem;
+    display: flex;
+    gap: 1rem;
+    width: 100%;
+    overflow-x: scroll;
+    white-space: nowrap;
+    position: relative;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+
+    img {
+      height: 100%;
+    }
+  }
+`;
 
 const Carousel = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -15,7 +47,7 @@ const Carousel = () => {
   useEffect(() => {
     const intervalId = setInterval(() => {
       setCurrentImageIndex((prevIndex) => (prevIndex + 1) % carouselImages.length);
-    }, 3000); 
+    }, 3000);
     return () => clearInterval(intervalId);
   }, [carouselImages.length]);
 
@@ -25,18 +57,18 @@ const Carousel = () => {
   ];
 
   return (
-    <div className="carousel-container">
-      <div className="header">
+    <StyledCarouselContainer className="carousel-container">
+      <StyledHeader className="header">
         <h1>Best offers for you</h1>
-      </div>
-      <div className="carousel-wrapper">
+      </StyledHeader>
+      <StyledCarouselWrapper className="carousel-wrapper">
         <div className="offer-card-container">
           {rotatedImages.map((image, index) => (
             <img key={index} src={image} alt="" />
           ))}
         </div>
-      </div>
-    </div>
+      </StyledCarouselWrapper>
+    </StyledCarouselContainer>
   );
 };
 
