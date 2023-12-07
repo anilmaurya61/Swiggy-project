@@ -9,4 +9,4 @@ const RestaurantHome = () => {
   )
 }
 
-export default RestaurantHome
+export default RestaurantHome;
