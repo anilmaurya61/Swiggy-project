@@ -1,8 +1,9 @@
-import React from 'react';
+import React,{useEffect} from 'react';
 import styled from 'styled-components';
 import img from '../../assets/img.jpeg';
 import logo from '../../assets/logo.png';
-import { signInWithGoogle } from '../../firebase/firebaseConfig';
+import { signInWithGoogle,getCurrentUser } from '../../firebase/firebaseConfig';
+import { useNavigate } from 'react-router-dom';
 
 const Container = styled.div`
   position: sticky;
@@ -82,6 +83,22 @@ const Button = styled.button`
 `;
 
 function RestaurantRegister() {
+  const navigate = useNavigate();
+
+  const handleRegisterClick = async () => {
+    try {
+      const user = await getCurrentUser();
+  
+      if (user) {
+        navigate('/restaurant/home');
+      } else {
+        await signInWithGoogle();
+        navigate('/restaurant/details')
+      }
+    } catch (error) {
+      console.error('Error checking authentication:', error.message);
+    }
+  };
   return (
     <>
       <Container>
@@ -94,7 +111,7 @@ function RestaurantRegister() {
           <Subtitle>Get listed on India's leading online food delivery marketplace today</Subtitle>
           <StyledDivider />
 
-          <Button onClick={()=>signInWithGoogle()}>Register</Button>
+          <Button onClick={handleRegisterClick}>Register</Button>
         </div>
       </Container>
     </>
