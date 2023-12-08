@@ -1,7 +1,11 @@
-import React from "react";
+import React, { useRef, useState } from "react";
 import styled from "styled-components";
 import img from "../../assets/img.jpeg";
 import logo from "../../assets/logo.png";
+import TextField from "@mui/material/TextField";
+import UploadButton from "@mui/material/Button";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import LoadingButton from "@mui/lab/LoadingButton";
 
 const Container = styled.div`
   font-family: "Open Sans";
@@ -80,9 +84,9 @@ const FlexInput = styled.div`
 `;
 
 const InputContainer = styled.div`
-  width: 25vw;
   margin-bottom: 4rem;
-  margin-right: 8rem;
+  margin-right: 12vw;
+  width: 24vw;
 `;
 
 const Input = styled.input`
@@ -104,9 +108,78 @@ const Button = styled.button`
   line-height: 24px;
   font-family: "Open Sans";
   letter-spacing: 1.5px;
+  cursor: pointer;
 `;
 
+// ... (previous code)
+
 function RestaurantDetails() {
+  const fileInputRef = useRef(null);
+  const [isUploaded, setIsUploaded] = useState(false);
+  const [city, setCity] = useState("");
+  const [restaurantName, setRestaurantName] = useState("");
+  const [restaurantLocation, setRestaurantLocation] = useState("");
+  const [cuisine, setCuisine] = useState("");
+  const [cityError, setCityError] = useState("");
+  const [restaurantNameError, setRestaurantNameError] = useState("");
+  const [restaurantLocationError, setRestaurantLocationError] = useState("");
+  const [cuisineError, setCuisineError] = useState("");
+  const [imageError, setImageError] = useState("");
+
+  const handleClick = () => {
+    fileInputRef.current.click();
+  };
+
+  const handleFileChange = () => {
+    const files = fileInputRef.current.files;
+
+    if (files.length > 0) {
+      setIsUploaded(true);
+      setImageError("");
+    } else {
+      setIsUploaded(false);
+      setImageError("Image is required");
+    }
+  };
+
+  const handleRegisterClick = () => {
+    // Validate the form fields
+    if (!city.trim()) {
+      setCityError("City is required");
+    } else {
+      setCityError("");
+    }
+
+    if (!restaurantName.trim()) {
+      setRestaurantNameError("Restaurant Name is required");
+    } else {
+      setRestaurantNameError("");
+    }
+
+    if (!restaurantLocation.trim()) {
+      setRestaurantLocationError("Restaurant Location is required");
+    } else {
+      setRestaurantLocationError("");
+    }
+    
+    if (!cuisine.trim()) {
+      setCuisineError("Cuisine is required");
+    } else {
+      setCuisineError("");
+    }
+
+    // Validate the image upload
+    if (!isUploaded) {
+      setImageError("Image is required");
+    }
+
+    // Proceed with registration if all fields are filled
+    if (city && restaurantName && restaurantLocation && isUploaded) {
+      // Handle registration logic here
+      console.log("Registration successful!");
+    }
+  };
+
   return (
     <>
       <Container>
@@ -140,7 +213,14 @@ function RestaurantDetails() {
             <span style={{ marginLeft: "5px", color: "rgb(224, 32, 32)" }}>
               *
             </span>
-            <Input />
+            <TextField
+              style={{ display: "block", marginTop: "10px", width: "25vw" }}
+              id="outlined-required"
+              InputProps={{ style: { width: "24vw" } }}
+              onChange={(e) => setCity(e.target.value)}
+              error={!!cityError}
+              helperText={cityError}
+            />
           </InputContainer>
 
           <InputContainer>
@@ -148,26 +228,99 @@ function RestaurantDetails() {
             <span style={{ marginLeft: "5px", color: "rgb(224, 32, 32)" }}>
               *
             </span>
-            <Input />
+            <TextField
+              style={{ display: "block", marginTop: "10px", width: "25vw" }}
+              id="outlined-required"
+              InputProps={{ style: { width: "25vw" } }}
+              onChange={(e) => setRestaurantName(e.target.value)}
+              error={!!restaurantNameError}
+              helperText={restaurantNameError}
+            />
           </InputContainer>
 
           <InputContainer>
-            <span>Enter Owner Name</span>
+            <span>Restaurant Location</span>
             <span style={{ marginLeft: "5px", color: "rgb(224, 32, 32)" }}>
               *
             </span>
-            <Input />
+            <TextField
+              style={{ display: "block", marginTop: "10px" }}
+              InputProps={{ style: { width: "24vw" } }}
+              id="outlined-required"
+              onChange={(e) => setRestaurantLocation(e.target.value)}
+              error={!!restaurantLocationError}
+              helperText={restaurantLocationError}
+            />
           </InputContainer>
 
           <InputContainer>
-            <span>Please share your WhatsApp number here</span>
+            <span>Add Cuisine Separated by comma</span>
             <span style={{ marginLeft: "5px", color: "rgb(224, 32, 32)" }}>
               *
             </span>
-            <Input />
+            <TextField
+              style={{ display: "block", marginTop: "10px" }}
+              InputProps={{ style: { width: "24vw" } }}
+              id="outlined-required"
+              onChange={(e) => setCuisine(e.target.value)}
+              error={!!cuisineError}
+              helperText={cuisineError}
+            />
+          </InputContainer>
+
+          <InputContainer>
+            <div style={{ display: "block" }}>
+              <span>Upload Cover Image for Restaurant</span>
+              <span style={{ marginLeft: "5px", color: "rgb(224, 32, 32)" }}>
+                *
+              </span>
+            </div>
+            <UploadButton
+              component="label"
+              variant="contained"
+              startIcon={<CloudUploadIcon />}
+              style={{
+                marginTop: "10px",
+                backgroundColor: isUploaded ? "#f68621" : null,
+              }}
+              onClick={handleClick}
+            >
+              <input
+                type="file"
+                accept="image/*"
+                style={{ display: "none" }}
+                ref={fileInputRef}
+                onChange={handleFileChange}
+              />
+              {isUploaded ? "Uploaded" : "Upload file"}
+            </UploadButton>
+            {imageError && (
+              <div style={{ color: "rgb(224, 32, 32)", marginTop: "5px" }}>
+                {imageError}
+              </div>
+            )}
           </InputContainer>
         </FlexInput>
-        <Button>Proceed</Button>
+        <LoadingButton
+          loading={false}
+          loadingPosition="start"
+          variant="outlined"
+          onClick={handleRegisterClick}
+          style={{
+            backgroundColor: "#f68621",
+            border: "none",
+            borderRadius: "4px",
+            height: "45px",
+            width: "230px",
+            color: "white",
+            fontSize: "20px",
+            lineHeight: "24px",
+            fontFamily: "Open Sans",
+            letterSpacing: "1px",
+          }}
+        >
+          Register
+        </LoadingButton>
       </FormContainer>
     </>
   );
