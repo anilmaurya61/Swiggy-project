@@ -57,6 +57,4 @@ export const getCurrentUser = () => {
   });
 };
 
-
-
 export const db =getFirestore(app);

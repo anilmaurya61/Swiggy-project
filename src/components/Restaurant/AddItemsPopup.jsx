@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import Button from '@mui/material/Button';
-import CloseIcon from '@mui/icons-material/Close';
+import {Close as CloseIcon, Add as AddIcon} from '@mui/icons-material';
 import TextField from '@mui/material/TextField';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { IconButton, RadioGroup, FormControlLabel, Radio } from '@mui/material';
+import LoadingButton from '@mui/lab/LoadingButton';
+import { addMenuItem } from '../../firebase/firebaseRestaurantServices'
+import uniqid from 'uniqid';
 
 const BlurredBackground = styled.div`
   position: fixed;
@@ -66,6 +69,7 @@ const AddItemsPopup = ({ open, onClose }) => {
   const [imageName, setImageName] = useState('');
   const [itemNameError, setItemNameError] = useState('');
   const [priceError, setPriceError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleIsVegetarian = () => {
     setIsVegetarian(!isVegetarian)
@@ -92,7 +96,7 @@ const AddItemsPopup = ({ open, onClose }) => {
     setImageName(file ? file.name : '');
   };
 
-  const handleAddItem = () => {
+  const handleAddItem = async () => {
     if (!itemName) {
       setItemNameError('Item name cannot be empty');
       return;
@@ -102,6 +106,9 @@ const AddItemsPopup = ({ open, onClose }) => {
       setPriceError('Price must be a valid number');
       return;
     }
+    setIsLoading(true);
+    await addMenuItem({ "restaurantId": uniqid(), "itemId": uniqid(), "itemName": itemName, "price": price, "description": description, "isVegetarian": isVegetarian })
+    setIsLoading(false);
     onClose();
   };
 
@@ -184,9 +191,13 @@ const AddItemsPopup = ({ open, onClose }) => {
           </Button>
           <input type="file" accept="image/*" onChange={handleImageUpload} />
         </UploadButton>
-        <Button variant="contained" sx={{color:"#fff", backgroundColor:"#f68621"}} onClick={handleAddItem}>
+        <LoadingButton
+          loading = {isLoading}
+          loadingPosition="start"
+          startIcon={<AddIcon />}
+          variant="outlined" sx={{ color: "#fff", backgroundColor: "#f68621" }} onClick={handleAddItem}>
           Add Item
-        </Button>
+        </LoadingButton>
       </PopupContainer>
     </>
   );
