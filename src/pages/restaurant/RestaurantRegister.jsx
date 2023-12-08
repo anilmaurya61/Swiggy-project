@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import img from '../../assets/img.jpeg';
 import logo from '../../assets/logo.png';
-import { signInWithGoogle } from '../../firebase/firebaseConfig';
+import { signInWithGoogle, getCurrentUser } from '../../firebase/firebaseConfig';
+import { useNavigate } from 'react-router-dom';
 
 const Container = styled.div`
   position: sticky;
@@ -29,9 +30,9 @@ const Logo = styled.img`
   vertical-align: middle;
   border-style: none;
 `;
-const LogoText=styled.div`
-   margin-top:14vh;
-`
+const LogoText = styled.div`
+  margin-top: 14vh;
+`;
 
 const HelpText = styled.span`
   color: white;
@@ -70,7 +71,7 @@ const Button = styled.button`
   background-color: #f68621;
   border: none;
   border-radius: 4px;
-  margin-top:40px;
+  margin-top: 40px;
   height: 45px;
   width: 230px;
   color: white;
@@ -81,7 +82,36 @@ const Button = styled.button`
   cursor: pointer;
 `;
 
+const Message = styled.div`
+  color: white;
+  font-size: 18px;
+  margin-top: 20px;
+`;
+
 function RestaurantRegister() {
+  const navigate = useNavigate();
+  const [registrationMessage, setRegistrationMessage] = useState('');
+
+  const handleRegisterClick = async () => {
+    try {
+      setRegistrationMessage('Checking authentication...');
+      const user = await getCurrentUser();
+
+      if (user) {
+        setRegistrationMessage('Already registered, redirecting...');
+        navigate('/restaurant/');
+      } else {
+        setRegistrationMessage('Signing in...');
+        await signInWithGoogle();
+        setRegistrationMessage('Redirecting to details...');
+        navigate('/restaurant/details');
+      }
+    } catch (error) {
+      setRegistrationMessage(`Error: ${error.message}`);
+      console.error('Error checking authentication:', error.message);
+    }
+  };
+
   return (
     <>
       <Container>
@@ -94,7 +124,8 @@ function RestaurantRegister() {
           <Subtitle>Get listed on India's leading online food delivery marketplace today</Subtitle>
           <StyledDivider />
 
-          <Button onClick={()=>signInWithGoogle()}>Register</Button>
+          <Button onClick={handleRegisterClick}>Register</Button>
+          {registrationMessage && <Message>{registrationMessage}</Message>}
         </div>
       </Container>
     </>

@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getAuth, GoogleAuthProvider, signInWithPopup, signOut } from "firebase/auth";
+import { getAuth, GoogleAuthProvider,onAuthStateChanged, signInWithPopup, signOut } from "firebase/auth";
 import 'firebase/firestore';
 import { getFirestore } from "firebase/firestore";
 
@@ -18,23 +18,45 @@ export const app = initializeApp(firebaseConfig);
 export const auth=getAuth(app);
 const provider= new GoogleAuthProvider();
 
-export const signInWithGoogle= ()=>{
-    signInWithPopup(auth,provider).then((result)=>{
-       console.log(result);
-    }).catch( (error)=>{
-     console.log(error)
-    })
- }
- 
+export const signInWithGoogle = () => {
+  return new Promise((resolve, reject) => {
+    signInWithPopup(auth, provider)
+      .then((result) => {
+        console.log(result);
+        resolve(result.user);
+      })
+      .catch((error) => {
+        console.error(error);
+        reject(error);
+      });
+  });
+}
+
 export const signOutUser = () => {
-     signOut(auth)
-       .then(() => {
-         console.log('User signed out successfully');
-       })
-       .catch((error) => {
-         console.error('Error signing out:', error.message);
-       });
-   };
+  return new Promise((resolve, reject) => {
+    signOut(auth)
+      .then(() => {
+        console.log('User signed out successfully');
+        resolve();
+      })
+      .catch((error) => {
+        console.error('Error signing out:', error.message);
+        reject(error);
+      });
+  });
+};
+
+export const getCurrentUser = () => {
+  return new Promise((resolve, reject) => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      unsubscribe();
+      resolve(user);
+    }, (error) => {
+      reject(error);
+    });
+  });
+};
+
 
 
 export const db =getFirestore(app);
