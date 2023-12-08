@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import img from '../../assets/img.jpeg';
 import logo from '../../assets/logo.png';
+import { signInWithGoogle } from '../../firebase/firebaseConfig';
 
 const Container = styled.div`
   position: sticky;
@@ -91,7 +92,8 @@ function RestaurantRegister() {
           <Title>Partner with Swiggy</Title>
           <Subtitle>Get listed on India's leading online food delivery marketplace today</Subtitle>
           <StyledDivider />
-          <Button>Register</Button>
+
+          <Button onClick={()=>signInWithGoogle()}>Register</Button>
         </div>
       </Container>
     </>
