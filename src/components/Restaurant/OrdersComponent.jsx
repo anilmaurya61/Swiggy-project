@@ -3,6 +3,14 @@ import styled from 'styled-components';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 import AllOrders from './order.json';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+    setOrders,
+    setSelectedStatus,
+    setSelectedOrderId,
+    setCurrentPage,
+    handleStatusChange,
+} from '../../feature/restaurant/RestaurantHomeSlice';
 
 const OrdersContainer = styled.div`
   max-width: 100%;
@@ -44,31 +52,23 @@ const PaginationContainer = styled.div`
 `;
 
 const OrdersComponent = () => {
-    const pageSize = 5;
-    const [currentPage, setCurrentPage] = useState(1);
-    const [orders, setOrders] = useState([]);
-    const [selectedStatus, setSelectedStatus] = useState('');
-    const [selectedOrderId, setSelectedOrderId] = useState(null);
+    const dispatch = useDispatch();
+    const { orders, selectedStatus, selectedOrderId, currentPage, pageSize} = useSelector((state) => state.Orders);
 
     useEffect(() => {
-        setOrders(AllOrders);
+        dispatch(setOrders(AllOrders));
     }, []);
 
     const totalPages = Math.ceil(orders.length / pageSize);
 
     const handlePageChange = (event, newPage) => {
-        setCurrentPage(newPage);
-        setSelectedOrderId(null);
+        dispatch(setCurrentPage(newPage));
+        dispatch(setSelectedOrderId(null));
     };
 
     const handleStatusChange = (orderId, newStatus) => {
-        setSelectedOrderId(orderId);
-        setSelectedStatus(newStatus);
-        setOrders((prevOrders) =>
-            prevOrders.map((order) =>
-                order.orderId === orderId ? { ...order, orderStatus: newStatus } : order
-            )
-        );
+        dispatch(setSelectedOrderId(orderId));
+        dispatch(setSelectedStatus(newStatus));
     };
 
     const startIndex = (currentPage - 1) * pageSize;
