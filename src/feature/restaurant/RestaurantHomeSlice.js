@@ -1,6 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-
 const AddItems = createSlice({
   name: 'form',
   initialState: {
@@ -50,7 +49,8 @@ export const {
 
 export const AddItemsReducer = AddItems.reducer;
 
-// Second Slice
+// ordersSlice
+
 const ordersSlice = createSlice({
   name: 'orders',
   initialState: {
