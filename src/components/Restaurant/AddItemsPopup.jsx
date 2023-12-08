@@ -4,7 +4,7 @@ import Button from '@mui/material/Button';
 import CloseIcon from '@mui/icons-material/Close';
 import TextField from '@mui/material/TextField';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-import { IconButton } from '@mui/material';
+import { IconButton, RadioGroup, FormControlLabel, Radio } from '@mui/material';
 
 const BlurredBackground = styled.div`
   position: fixed;
@@ -12,7 +12,7 @@ const BlurredBackground = styled.div`
   left: 0;
   width: 100%;
   height: 100%;
-  backdrop-filter: blur(5px); /* Adjust the blur amount as needed */
+  backdrop-filter: blur(5px);
   z-index: 999;
   display: ${(props) => (props.open ? 'block' : 'none')};
 `;
@@ -27,7 +27,9 @@ const PopupContainer = styled.div`
   padding: 20px;
   border-radius: 8px;
   z-index: 1000;
-  width: 300px; /* Adjust the width as needed */
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 `;
 
 const CloseButton = styled(IconButton)`
@@ -39,12 +41,21 @@ const CloseButton = styled(IconButton)`
 `;
 
 const UploadButton = styled.label`
-  display: inline-block;
-  margin-top: 16px;
+  margin-top: 16px auto;
   cursor: pointer;
+
   input {
     display: none;
   }
+`;
+
+const InputContainer = styled.div`
+  display: inline-flex;
+  gap: 1rem;
+`;
+
+const RadioContainer = styled.div`
+  display: flex;
 `;
 
 const AddItemsPopup = ({ open, onClose }) => {
@@ -55,6 +66,10 @@ const AddItemsPopup = ({ open, onClose }) => {
   const [imageName, setImageName] = useState('');
   const [itemNameError, setItemNameError] = useState('');
   const [priceError, setPriceError] = useState('');
+
+  const handleIsVegetarian = () => {
+    setIsVegetarian(!isVegetarian)
+  }
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -78,22 +93,15 @@ const AddItemsPopup = ({ open, onClose }) => {
   };
 
   const handleAddItem = () => {
-    // Check if itemName is empty
     if (!itemName) {
       setItemNameError('Item name cannot be empty');
       return;
     }
 
-    // Check if price is a valid number
     if (isNaN(price) || price === '') {
       setPriceError('Price must be a valid number');
       return;
     }
-
-    // Perform additional actions (e.g., adding the item to the list)
-    // ...
-
-    // Close the popup
     onClose();
   };
 
@@ -102,38 +110,35 @@ const AddItemsPopup = ({ open, onClose }) => {
       <BlurredBackground open={open} />
       <PopupContainer open={open}>
         <CloseButton variant="outlined" onClick={onClose}>
-          <CloseIcon/>
+          <CloseIcon />
         </CloseButton>
+        <InputContainer>
+          <TextField
+            id="item-name"
+            name="itemName"
+            label="Item Name"
+            variant="standard"
+            value={itemName}
+            onChange={handleInputChange}
+            error={Boolean(itemNameError)}
+            helperText={itemNameError}
+            fullWidth
+            margin="normal"
+          />
 
-        {/* TextField for item name with error handling */}
-        <TextField
-          id="item-name"
-          name="itemName"
-          label="Item Name"
-          variant="standard"
-          value={itemName}
-          onChange={handleInputChange}
-          error={Boolean(itemNameError)}
-          helperText={itemNameError}
-          fullWidth
-          margin="normal"
-        />
-
-        {/* TextField for price with error handling */}
-        <TextField
-          id="price"
-          name="price"
-          label="Price"
-          variant="standard"
-          value={price}
-          onChange={handleInputChange}
-          error={Boolean(priceError)}
-          helperText={priceError}
-          fullWidth
-          margin="normal"
-        />
-
-        {/* TextField for description */}
+          <TextField
+            id="price"
+            name="price"
+            label="Price"
+            variant="standard"
+            value={price}
+            onChange={handleInputChange}
+            error={Boolean(priceError)}
+            helperText={priceError}
+            fullWidth
+            margin="normal"
+          />
+        </InputContainer>
         <TextField
           id="description"
           name="description"
@@ -146,26 +151,40 @@ const AddItemsPopup = ({ open, onClose }) => {
           rows={3}
           margin="normal"
         />
-
-        {/* Checkbox for isVegetarian */}
-        <TextField
-          id="is-vegetarian"
-          name="isVegetarian"
-          label="Is Vegetarian"
-          variant="standard"
-          checked={isVegetarian}
-          onChange={handleInputChange}
-          type="checkbox"
-        />
-
+        <RadioContainer>
+          <RadioGroup
+            row
+            value={!isVegetarian ? 'vegetarian' : 'non-vegetarian'}
+            onChange={() => handleIsVegetarian()}
+          >
+            <FormControlLabel
+              value="vegetarian"
+              control={<Radio color="success" />}
+              label="Vegetarian"
+            />
+            <FormControlLabel
+              value="non-vegetarian"
+              control={
+                <Radio
+                  sx={{
+                    color: '#e91212',
+                    '&.Mui-checked': {
+                      color: '#d30a2b',
+                    },
+                  }}
+                />
+              }
+              label="Non-Vegetarian"
+            />
+          </RadioGroup>
+        </RadioContainer>
         <UploadButton>
           <Button variant="outlined" component="span" startIcon={<CloudUploadIcon />}>
             Upload Image
           </Button>
           <input type="file" accept="image/*" onChange={handleImageUpload} />
         </UploadButton>
-
-        <Button variant="contained" color="primary" onClick={handleAddItem}>
+        <Button variant="contained" sx={{color:"#fff", backgroundColor:"#f68621"}} onClick={handleAddItem}>
           Add Item
         </Button>
       </PopupContainer>
