@@ -9,8 +9,8 @@ const Restaurant = () => {
     <>
       <Routes>
         <Route path="/" element={<RestaurantHome />} />
-        <Route path="/details" element={<RestaurantDetails />} />
-        <Route path="/register" element={<RestaurantRegister/>}/>
+        <Route path="/register" element={<RestaurantRegister/>} />
+        <Route path="details" element={<RegisterDetails/>}/>
       </Routes>
     </>
   );

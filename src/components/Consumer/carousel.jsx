@@ -2,13 +2,14 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 
 const StyledCarouselContainer = styled.div`
-  width: 100%;
+  width: 90%;
+  margin:0 auto;
   padding: 0 5rem 0 5rem;
 `;
 
 const StyledHeader = styled.div`
   h1 {
-    margin: 0;
+    margin: 2rem 0;
     padding: 0;
   }
 `;
@@ -22,6 +23,7 @@ const StyledCarouselWrapper = styled.div`
     overflow-x: scroll;
     white-space: nowrap;
     position: relative;
+    margin: 0 auto;
 
     &::-webkit-scrollbar {
       display: none;

@@ -96,8 +96,6 @@ function RestaurantRegister() {
           <Button onClick={()=>signInWithGoogle()}>Register</Button>
         </div>
       </Container>
-
-      
     </>
   );
 }
