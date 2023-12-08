@@ -3,6 +3,9 @@ import styled from 'styled-components';
 import OrdersComponent from './OrdersComponent';
 import MenuItem from './MenuItem';
 import RestaurantDetailsComponent from './RestaurantDetailsComponent';
+import { Button } from '@mui/material';
+import { Add as AddIcon } from '@mui/icons-material';
+import AddItemsPopup from './AddItemsPopup';
 
 const TabsContainer = styled.div`
   width: 80%;
@@ -28,6 +31,11 @@ const TabButton = styled.button`
   }
 `;
 
+const AddItemButton = styled.div`
+  display: flex;
+  justify-content: end; 
+  margin-right: 20%;
+`;
 
 const MenuItems = () => {
   const menuData = {
@@ -39,12 +47,31 @@ const MenuItems = () => {
     "itemImage": "https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_208,h_208,c_fit/udqvo1tklzbymfdrvf3h",
     "isVegetarian": true,
   };
+
+  const [isPopupOpen, setPopupOpen] = useState(false);
+
+  const handleOpenPopup = () => {
+    setPopupOpen(true);
+  };
+
+  const handleClosePopup = () => {
+    setPopupOpen(false);
+  };
+
   return (
     <>
+      <AddItemButton>
+        <Button variant="outlined" startIcon={<AddIcon />} onClick={handleOpenPopup}>
+          Add Items
+        </Button>
+      </AddItemButton>
+
       <MenuItem {...menuData} />
       <MenuItem {...menuData} />
       <MenuItem {...menuData} />
       <MenuItem {...menuData} />
+
+      {isPopupOpen && <AddItemsPopup open={isPopupOpen} onClose={handleClosePopup} />}
     </>
   )
 }
