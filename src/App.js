@@ -3,7 +3,6 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Consumer from './routes/Consumer';
 import Restaurant from './routes/Restaurant';
 
-
 function App() {
   return (
     <Router>
