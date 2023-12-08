@@ -1,74 +1,97 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
+import {
+  Search as SearchIcon,
+  LocalOfferOutlined as OfferIcon,
+  HelpOutlineOutlined as HelpIcon,
+  PersonOutlineOutlined as PersonIcon,
+  AddShoppingCartOutlined as CartIcon,
+} from '@mui/icons-material';
 
-const StyledFooter = styled.div`
+const StyledNav = styled.nav`
+  background-color: #fff;
+  box-shadow: 0 0 10px 0 black;
+`;
+
+const StyledContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 5rem;
+  padding: 0 5rem;
+`;
+
+const StyledUl = styled.ul`
+  list-style: none;
   display: flex;
   justify-content: space-around;
-  background-color: #02060c;
-  padding: 20px;
-  height: 20rem;
-  padding-top: 5rem;
+  width: 60%;
 `;
 
-const StyledFooterSection = styled.div`
-  text-align: left;
-
-  h4 {
-    color: #fff;
-    font-size: 3rem;
-    margin-bottom: 10px;
-  }
-
-  ul {
-    list-style: none;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    width: 14rem;
-  }
-
-  li {
-    color: #fff;
-    margin-bottom: 5px;
-    cursor: pointer;
-    font-size: 1.5rem;
-
-    &:hover {
-      color: #e44d26;
-    }
+const StyledLogo = styled.div`
+  img {
+    height: 4rem;
   }
 `;
 
-const Footer = () => {
+const StyledIconTextContainer = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const StyledSpan = styled.span`
+  margin-left: 8px;
+  cursor: pointer;
+`;
+
+const HeaderComponent = () => {
+  const [Auth, setAuth] = useState('Login');
+
+  function authentication() {
+    setAuth(Auth === 'Login' ? 'Logout' : 'Login');
+  }
+
   return (
-    <StyledFooter className="swiggy-footer">
-      <StyledFooterSection className="footer-section">
-        <h4>Discover</h4>
-        <ul>
-          <li>About us</li>
-          <li>Team</li>
-          <li>Careers</li>
-        </ul>
-      </StyledFooterSection>
-
-      <StyledFooterSection className="footer-section">
-        <h4>Contact</h4>
-        <ul>
-          <li>Help & Support</li>
-          <li>Partner with us</li>
-        </ul>
-      </StyledFooterSection>
-
-      <StyledFooterSection className="footer-section">
-        <h4>Legal</h4>
-        <ul>
-          <li>Terms & Conditions</li>
-          <li>Privacy Policy</li>
-        </ul>
-      </StyledFooterSection>
-    </StyledFooter>
+    <StyledNav>
+      <StyledContainer className="container">
+        <StyledLogo className="logo">
+          <img src="https://cdn.worldvectorlogo.com/logos/swiggy-1.svg" alt="" />
+        </StyledLogo>
+        <StyledUl>
+          <li>
+            <StyledIconTextContainer>
+              <SearchIcon />
+              <StyledSpan>Search</StyledSpan>
+            </StyledIconTextContainer>
+          </li>
+          <li>
+            <StyledIconTextContainer>
+              <OfferIcon />
+              <StyledSpan>Offer</StyledSpan>
+            </StyledIconTextContainer>
+          </li>
+          <li>
+            <StyledIconTextContainer>
+              <HelpIcon />
+              <StyledSpan>Help</StyledSpan>
+            </StyledIconTextContainer>
+          </li>
+          <li>
+            <StyledIconTextContainer>
+              <PersonIcon />
+              <StyledSpan onClick={authentication}>{Auth}</StyledSpan>
+            </StyledIconTextContainer>
+          </li>
+          <li>
+            <StyledIconTextContainer>
+              <CartIcon />
+              <StyledSpan>Cart</StyledSpan>
+            </StyledIconTextContainer>
+          </li>
+        </StyledUl>
+      </StyledContainer>
+    </StyledNav>
   );
 };
 
-export default Footer;
+export default HeaderComponent;

@@ -94,8 +94,6 @@ function RestaurantRegister() {
           <Button>Register</Button>
         </div>
       </Container>
-
-      
     </>
   );
 }
