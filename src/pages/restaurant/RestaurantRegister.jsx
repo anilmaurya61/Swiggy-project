@@ -78,6 +78,7 @@ const Button = styled.button`
   line-height: 24px;
   font-family: 'Open Sans';
   letter-spacing: 1.5px;
+  cursor: pointer;
 `;
 
 function RestaurantRegister() {

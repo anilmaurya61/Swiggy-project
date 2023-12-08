@@ -1,8 +1,8 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
-import RestaurantHome from '../pages/restaurent/RestaurentHome';
-import RestaurantDetails from '../pages/restaurent/RegisterDetails';
-import RestaurantRegister from '../pages/restaurent/RestrauntRegister';
+import RestaurantHome from '../pages/restaurant/RestaurantHome';
+import RestaurantDetails from '../pages/restaurant/RestaurantDetails'
+import RestaurantRegister from '../pages/restaurant/RestaurantRegister'
 
 const Restaurant = () => {
   return (
@@ -10,7 +10,7 @@ const Restaurant = () => {
       <Routes>
         <Route path="/" element={<RestaurantHome />} />
         <Route path="/register" element={<RestaurantRegister/>} />
-        <Route path="details" element={<RegisterDetails/>}/>
+        <Route path="/details" element={<RestaurantDetails/>}/>
       </Routes>
     </>
   );
