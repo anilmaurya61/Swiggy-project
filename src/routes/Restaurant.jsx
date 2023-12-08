@@ -11,7 +11,6 @@ const Restaurant = () => {
         <Route path="/" element={<RestaurantHome />} />
         <Route path="/register" element={<RestaurantRegister/>} />
         <Route path="/details" element={<RestaurantDetails/>}/>
-        <Route path="/home" element={<RestaurantHome/>}/>
       </Routes>
     </>
   );
