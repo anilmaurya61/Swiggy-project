@@ -6,6 +6,8 @@ import { getCurrentUser } from '../../firebase/firebaseConfig';
 import { useDispatch } from 'react-redux';
 import { useGetMenuItemQuery } from '../../firebase/firebaseRTKquery'
 import { addItems } from '../../feature/restaurant/RestaurantHomeSlice'
+import { getFirestore, collection, getDocs } from 'firebase/firestore';
+import { useUser } from '../../context/authContext';
 
 const RestaurantHome = () => {
   const navigate = useNavigate();
