@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import OrdersComponent from './OrdersComponent';
 import MenuItem from './MenuItem';
@@ -6,6 +6,7 @@ import RestaurantDetailsComponent from './RestaurantDetailsComponent';
 import { Button } from '@mui/material';
 import { Add as AddIcon } from '@mui/icons-material';
 import AddItemsPopup from './AddItemsPopup';
+import { useSelector } from 'react-redux';
 
 const TabsContainer = styled.div`
   width: 80%;
@@ -38,15 +39,7 @@ const AddItemButton = styled.div`
 `;
 
 const MenuItems = () => {
-  const menuData = {
-    "restaurantId": "26342374623",
-    "itemId": "137618736483",
-    "itemName": "Fruit Treat Sundae",
-    "description": "Want Some Excitement? Then This Is Perfect For You, Scoops Of Strawberry, Vanilla & Pista Ice Cream Served With Fresh Cut Fruits From Apple, Pineapple & Sweet Lime, Lychees, Peaches, Topped With Whipped Cream And Natural Mango Sauce, Strawberry Sauce And A Little Surprise!",
-    "price": 199,
-    "itemImage": "https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_208,h_208,c_fit/udqvo1tklzbymfdrvf3h",
-    "isVegetarian": true,
-  };
+  const Items = useSelector((state) => state.AddItems.items)
 
   const [isPopupOpen, setPopupOpen] = useState(false);
 
@@ -65,12 +58,9 @@ const MenuItems = () => {
           Add Items
         </Button>
       </AddItemButton>
-
-      <MenuItem {...menuData} />
-      <MenuItem {...menuData} />
-      <MenuItem {...menuData} />
-      <MenuItem {...menuData} />
-
+      {Items.map((item, index) => (
+        <MenuItem {...item} addBtn={false} key={index} />
+      ))}
       {isPopupOpen && <AddItemsPopup open={isPopupOpen} onClose={handleClosePopup} />}
     </>
   )
@@ -81,16 +71,6 @@ const Tabs = () => {
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
-  };
-
-  const menuData = {
-    "restaurantId": "26342374623",
-    "itemId": "137618736483",
-    "itemName": "Fruit Treat Sundae",
-    "description": "Want Some Excitement? Then This Is Perfect For You, Scoops Of Strawberry, Vanilla & Pista Ice Cream Served With Fresh Cut Fruits From Apple, Pineapple & Sweet Lime, Lychees, Peaches, Topped With Whipped Cream And Natural Mango Sauce, Strawberry Sauce And A Little Surprise!",
-    "price": 199,
-    "itemImage": "https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_208,h_208,c_fit/udqvo1tklzbymfdrvf3h",
-    "isVegetarian": true,
   };
 
   return (
