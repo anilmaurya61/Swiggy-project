@@ -20,6 +20,7 @@ import {
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { app } from '../../firebase/auth'
 import {addMenuItem} from '../../firebase/firestoreServices'
+import { useUser } from '../../context/authContext';
 
 
 const BlurredBackground = styled.div`
@@ -75,6 +76,7 @@ const RadioContainer = styled.div`
 `;
 
 const AddItemsPopup = ({ open, onClose }) => {
+  const user=useUser();
   const [file, setFile] = useState(null);
   const dispatch = useDispatch();
   const AddItems = useSelector((state) => state.AddItems);
@@ -125,8 +127,8 @@ const AddItemsPopup = ({ open, onClose }) => {
         const url = await getDownloadURL(storageRef);
         console.log('File download URL:', url);
 
-        await addMenuItem({ "restaurantId": uniqid(), "itemId": itemId, "itemName": itemName, "price": price, "description": description, "isVegetarian": isVegetarian, "itemImage": url })
-        dispatch(addItems({ "restaurantId": uniqid(), "itemId": itemId, "itemName": itemName, "price": price, "description": description, "isVegetarian": isVegetarian, "itemImage": url }));
+        await addMenuItem({ "restaurantId": user?.uid, "itemId": itemId, "itemName": itemName, "price": price, "description": description, "isVegetarian": isVegetarian, "itemImage": url })
+        dispatch(addItems({ "restaurantId": user?.uid, "itemId": itemId, "itemName": itemName, "price": price, "description": description, "isVegetarian": isVegetarian, "itemImage": url }));
         dispatch(setLoading(false));
         onClose();
       } catch (error) {

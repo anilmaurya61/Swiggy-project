@@ -9,7 +9,7 @@ export const menuItemsApi = createApi({
     getMenuItem: builder.query({
       async queryFn(menuItemId) {
         try {
-          const menuItemRef = doc(db, "menus", 'lpxif54v');
+          const menuItemRef = doc(db, "menus", menuItemId);
           const menuItemDoc = await getDoc(menuItemRef);
 
           if (menuItemDoc.exists()) {

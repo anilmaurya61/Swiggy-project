@@ -3,7 +3,7 @@ import { db } from "./firebaseConfig";
 
 const addMenuItem = async (itemData) => {
     try {
-        const restaurantId = 'lpxif54v'; 
+        const restaurantId = itemData.restaurantId; 
         const menuRef = doc(db, "menus", restaurantId);
 
         const menuSnapshot = await getDoc(menuRef);

@@ -12,14 +12,14 @@ import { useUser } from '../../context/authContext';
 const RestaurantHome = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { data: menuItem, error, isLoading } = useGetMenuItemQuery('lpwxy39r');
   const user=useUser();
+  const { data: menuItem, error, isLoading } = useGetMenuItemQuery(user?.uid);
   const firestore = getFirestore();
 
   useEffect(() => {
     const checkRestaurantExistence = async () => {
       if (user) {
-        const uid = user.uid;
+        const uid = user?.uid;
         const restaurantCollection = collection(firestore, 'restaurants');
   
         try {

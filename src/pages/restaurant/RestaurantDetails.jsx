@@ -137,7 +137,7 @@ function RestaurantDetails() {
 useEffect(() => {
   const checkRestaurantExistence = async () => {
     if (user) {
-      const uid = user.uid;
+      const uid = user?.uid;
       const restaurantCollection = collection(firestore, 'restaurants');
 
       try {
@@ -209,7 +209,7 @@ useEffect(() => {
     if (city && restaurantName && restaurantLocation && cuisine&& isUploaded) {
 
       const files = fileInputRef.current.files;
-        const restaurant_id = user.uid;
+        const restaurant_id = user?.uid;
         const storage = getStorage(app)
         const storageRef = ref(storage, `restaurant_imgs/${restaurant_id}.jpg`);
   
