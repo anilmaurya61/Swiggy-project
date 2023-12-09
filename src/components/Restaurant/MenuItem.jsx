@@ -29,6 +29,8 @@ const LeftColumn = styled.div`
 `;
 
 const RightColumn = styled.div`
+  width: 40%;
+  height: auto;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -84,18 +86,18 @@ const AddButton = styled.button`
 `;
 
 
-const MenuItem = ({ restaurantId, itemId, itemName, price, description, itemImage, isVegetarian }) => {
+const MenuItem = ({addBtn, restaurantId, itemId, itemName, price, description, itemImage, isVegetarian }) => {
   return (
     <MenuItemWrapper>
       <LeftColumn>
         <VegetarianLabel isVegetarian={isVegetarian} src={veg} alt="Vegetarian" />
         <ItemName>{itemName}</ItemName>
-        <Price>${price.toFixed(2)}</Price>
+        <Price>₹{price}</Price>
         <Description>{description}</Description>
       </LeftColumn>
       <RightColumn>
         <ItemImage src={itemImage} alt={itemName} />
-        <AddButton>ADD</AddButton>
+       {addBtn && <AddButton>ADD</AddButton>}
       </RightColumn>
     </MenuItemWrapper>
   );

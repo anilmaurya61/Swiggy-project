@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Button from '@mui/material/Button';
 import { Close as CloseIcon, Add as AddIcon } from '@mui/icons-material';
@@ -6,7 +6,6 @@ import TextField from '@mui/material/TextField';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { IconButton, RadioGroup, FormControlLabel, Radio } from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
-import { addMenuItem } from '../../firebase/firebaseRestaurantServices'
 import uniqid from 'uniqid';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -15,7 +14,12 @@ import {
   setError,
   setLoading,
   clearForm,
+  setImage,
+  addItems
 } from '../../feature/restaurant/RestaurantHomeSlice';
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { app } from '../../firebase/auth'
+import {addMenuItem} from '../../firebase/firestoreServices'
 
 
 const BlurredBackground = styled.div`
@@ -71,9 +75,10 @@ const RadioContainer = styled.div`
 `;
 
 const AddItemsPopup = ({ open, onClose }) => {
-
+  const [file, setFile] = useState(null);
   const dispatch = useDispatch();
   const AddItems = useSelector((state) => state.AddItems);
+
 
   const handleIsVegetarian = () => {
     dispatch(setCheckbox({ name: 'isVegetarian', checked: !AddItems.isVegetarian }));
@@ -86,10 +91,12 @@ const AddItemsPopup = ({ open, onClose }) => {
 
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
+    setFile(file);
   };
 
   const handleAddItem = async () => {
-    const { itemName, price, description, isVegetarian } = AddItems;
+    const { itemName, price, description, isVegetarian, itemImage } = AddItems;
+
 
     if (!itemName) {
       dispatch(setError({ name: 'itemName', error: 'Item name cannot be empty' }));
@@ -100,12 +107,33 @@ const AddItemsPopup = ({ open, onClose }) => {
       dispatch(setError({ name: 'price', error: 'Price must be a valid number' }));
       return;
     }
+    if (file) {
+      const itemId = uniqid();
+      const storage = getStorage(app)
+      const storageRef = ref(storage, `itemImages/${itemId}.jpg`);
 
-    dispatch(setLoading(true));
-    await addMenuItem({ "restaurantId": uniqid(), "itemId": uniqid(), "itemName": itemName, "price": price, "description": description, "isVegetarian": isVegetarian })
-    dispatch(setLoading(false));
+      const metadata = {
+        contentType: 'image/jpeg',
+      };
 
-    onClose();
+      try {
+        dispatch(setLoading(true));
+
+        const snapshot = await uploadBytes(storageRef, file, metadata);
+        console.log('File uploaded successfully');
+
+        const url = await getDownloadURL(storageRef);
+        console.log('File download URL:', url);
+
+        await addMenuItem({ "restaurantId": uniqid(), "itemId": itemId, "itemName": itemName, "price": price, "description": description, "isVegetarian": isVegetarian, "itemImage": url })
+        dispatch(addItems({ "restaurantId": uniqid(), "itemId": itemId, "itemName": itemName, "price": price, "description": description, "isVegetarian": isVegetarian, "itemImage": url }));
+        dispatch(setLoading(false));
+        onClose();
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    }
+   
     dispatch(clearForm());
   };
 
@@ -192,7 +220,7 @@ const AddItemsPopup = ({ open, onClose }) => {
           loading={AddItems.isLoading}
           loadingPosition="start"
           startIcon={<AddIcon />}
-          variant="outlined" sx={{ color: "#fff", backgroundColor: "#f68621" }} onClick={handleAddItem}>
+          variant="outlined" color='success' sx={{ color: "#fff", backgroundColor: "#f68621" }} onClick={handleAddItem}>
           Add Item
         </LoadingButton>
       </PopupContainer>

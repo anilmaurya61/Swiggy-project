@@ -4,6 +4,7 @@ import 'firebase/firestore';
 import { getFirestore } from "firebase/firestore";
 
 
+
 const firebaseConfig = {
   apiKey: "AIzaSyBqBAP4TWmq9gmrOu0QYohCzKConegsa4E",
   authDomain: "swiggy-project-20319.firebaseapp.com",

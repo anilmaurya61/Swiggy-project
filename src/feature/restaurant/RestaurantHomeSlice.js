@@ -3,6 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 const AddItems = createSlice({
   name: 'form',
   initialState: {
+    items: [],
     itemName: '',
     price: '',
     description: '',
@@ -10,8 +11,15 @@ const AddItems = createSlice({
     itemNameError: '',
     priceError: '',
     isLoading: false,
+    itemImage: null,
   },
   reducers: {
+    addItems: (state, action) => {
+      state.items = state.items.concat(action.payload);
+    },
+    setImage: (state, action) => {
+      state.itemImage = action.payload;
+    },
     setField: (state, action) => {
       const { name, value } = action.payload;
       state[name] = value;
@@ -45,6 +53,8 @@ export const {
   setError,
   setLoading,
   clearForm,
+  setImage,
+  addItems
 } = AddItems.actions;
 
 export const AddItemsReducer = AddItems.reducer;
