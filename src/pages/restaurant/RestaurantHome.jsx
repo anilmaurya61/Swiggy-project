@@ -62,7 +62,6 @@ const RestaurantHome = () => {
     <>
       <Header />
       <Tabs />
-      <ToastContainer />
     </>
   );
 };
