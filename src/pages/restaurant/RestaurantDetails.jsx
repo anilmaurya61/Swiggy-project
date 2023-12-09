@@ -11,6 +11,7 @@ import {app} from '../../firebase/firebaseConfig.js';
 import { getStorage, ref, uploadBytes, getDownloadURL} from 'firebase/storage';
 import { useEffect } from 'react';
 import { getFirestore, collection, getDocs } from 'firebase/firestore';
+import Header from "../../components/Restaurant/Header.jsx";
 import {
   setCity,
   setRestaurantName,
@@ -254,19 +255,7 @@ useEffect(() => {
 
   return (
     <>
-      <Container>
-        <div>
-          <div>
-            <Logo src={logo} />
-            <HelpText>Need Help? Contact Us: 080-45664746</HelpText>
-          </div>
-          <Title>Partner with Swiggy</Title>
-          <Subtitle>
-            Get listed on India's leading online food delivery marketplace today
-          </Subtitle>
-          <StyledDivider />
-        </div>
-      </Container>
+      <Header title={"Partner with Swiggy"} subtitle={"Get listed on India's leading online food delivery marketplace today"}/>
 
       <FormContainer>
         <h1

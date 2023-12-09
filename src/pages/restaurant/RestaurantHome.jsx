@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Tabs from '../../components/Restaurant/Tabs';
 import Header from '../../components/Restaurant/Header';
@@ -15,6 +15,7 @@ const RestaurantHome = () => {
   const user=useUser();
   const { data: menuItem, error, isLoading } = useGetMenuItemQuery(user?.uid);
   const firestore = getFirestore();
+  const [restaurantData, setRestaurantData] = useState();
 
   useEffect(() => {
     const checkRestaurantExistence = async () => {
@@ -26,6 +27,8 @@ const RestaurantHome = () => {
           const querySnapshot = await getDocs(restaurantCollection);
           const restaurantExists = querySnapshot.docs.some(docSnapshot => {
             const data = docSnapshot.data();
+            setRestaurantData(data);
+            console.log(data);
             return Object.values(data).some(value => value === uid);
           });
   
@@ -59,11 +62,10 @@ const RestaurantHome = () => {
 
     checkAuthentication();
   }, []);
-
   return (
     <>
-      <Header />
-      <Tabs />
+      <Header title={restaurantData?.restaurantName} subtitle={restaurantData?.restaurantLocation}/>
+      <Tabs restaurantData= {restaurantData}/>
     </>
   );
 };

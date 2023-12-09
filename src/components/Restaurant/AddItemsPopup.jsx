@@ -19,7 +19,7 @@ import {
 } from '../../feature/restaurant/RestaurantHomeSlice';
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { app } from '../../firebase/auth'
-import {addMenuItem} from '../../firebase/firestoreServices'
+import { addMenuItem } from '../../firebase/firestoreServices'
 import { useUser } from '../../context/authContext';
 
 
@@ -76,7 +76,7 @@ const RadioContainer = styled.div`
 `;
 
 const AddItemsPopup = ({ open, onClose }) => {
-  const user=useUser();
+  const user = useUser();
   const [file, setFile] = useState(null);
   const dispatch = useDispatch();
   const AddItems = useSelector((state) => state.AddItems);
@@ -135,7 +135,7 @@ const AddItemsPopup = ({ open, onClose }) => {
         console.error('Error:', error);
       }
     }
-   
+
     dispatch(clearForm());
   };
 
@@ -213,8 +213,13 @@ const AddItemsPopup = ({ open, onClose }) => {
           </RadioGroup>
         </RadioContainer>
         <UploadButton>
-          <Button variant="outlined" component="span" startIcon={<CloudUploadIcon />}>
-            Upload Image
+          <Button style={{
+            marginTop: "10px",
+            backgroundColor: file ? "#f68621" : "#3939a3",
+            color:'white',
+            width: "100%",
+          }} variant="outlined" component="span"  startIcon={<CloudUploadIcon />}>
+            {file ?  "Image Uploaded" : "Upload Image" }
           </Button>
           <input type="file" accept="image/*" onChange={handleImageUpload} />
         </UploadButton>
@@ -222,7 +227,20 @@ const AddItemsPopup = ({ open, onClose }) => {
           loading={AddItems.isLoading}
           loadingPosition="start"
           startIcon={<AddIcon />}
-          variant="outlined" color='success' sx={{ color: "#fff", backgroundColor: "#f68621" }} onClick={handleAddItem}>
+          variant="outlined" color='success' onClick={handleAddItem}
+          style={{
+            backgroundColor: "#f68621",
+            border: "none",
+            borderRadius: "4px",
+            height: "45px",
+            width: "100%",
+            color: "white",
+            fontSize: "20px",
+            lineHeight: "24px",
+            fontFamily: "Open Sans",
+            letterSpacing: "1px",
+          }}
+        >
           Add Item
         </LoadingButton>
       </PopupContainer>

@@ -74,7 +74,8 @@ const FormContainer = styled.div`
   padding-top: 12.9vh;
 `;
 
-const Header = () => {
+const Header = ({title, subtitle}) => {
+  console.log(Title);
     return (
         <>
             <Container>
@@ -83,9 +84,8 @@ const Header = () => {
                         <Logo src={logo} />
                         <HelpText>Need Help? Contact Us: 080-45664746</HelpText>
                     </div>
-                    <Title>Partner with Swiggy</Title>
-                    <Subtitle>Get listed on India's leading online food delivery marketplace today</Subtitle>
-                    <StyledDivider />
+                    <Title>{title}</Title>
+                    <Subtitle>{subtitle}</Subtitle>
                 </div>
             </Container>
         </>
