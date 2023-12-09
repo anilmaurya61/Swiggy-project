@@ -1,16 +1,19 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import Tabs from '../../components/Restaurant/Tabs';
 import Header from '../../components/Restaurant/Header';
 import { getCurrentUser } from '../../firebase/firebaseConfig';
-import { useUser } from '../../context/authContext';
-import { getFirestore, collection, getDocs } from 'firebase/firestore';
+import { useDispatch } from 'react-redux';
+import { useGetMenuItemQuery } from '../../firebase/firebaseRTKquery'
+import { addItems } from '../../feature/restaurant/RestaurantHomeSlice'
+
 const RestaurantHome = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { data: menuItem, error, isLoading } = useGetMenuItemQuery('lpwxy39r');
   const user=useUser();
   const firestore = getFirestore();
+
   useEffect(() => {
     const checkRestaurantExistence = async () => {
       if (user) {
@@ -34,7 +37,12 @@ const RestaurantHome = () => {
     };
     checkRestaurantExistence();
   }, [user, firestore,navigate]);
-  
+
+  useEffect(() => {
+    if (!isLoading && !error && menuItem) {
+      dispatch(addItems(menuItem?.items));
+    }
+  }, [menuItem]);
 
   useEffect(() => {
     const checkAuthentication = async () => {
