@@ -11,6 +11,7 @@ import {app} from '../../firebase/firebaseConfig.js';
 import { getStorage, ref, uploadBytes, getDownloadURL} from 'firebase/storage';
 import { useEffect } from 'react';
 import { getFirestore, collection, getDocs } from 'firebase/firestore';
+import Header from "../../components/Restaurant/Header.jsx";
 import {
   setCity,
   setRestaurantName,
@@ -137,7 +138,7 @@ function RestaurantDetails() {
 useEffect(() => {
   const checkRestaurantExistence = async () => {
     if (user) {
-      const uid = user.uid;
+      const uid = user?.uid;
       const restaurantCollection = collection(firestore, 'restaurants');
 
       try {
@@ -209,7 +210,7 @@ useEffect(() => {
     if (city && restaurantName && restaurantLocation && cuisine&& isUploaded) {
 
       const files = fileInputRef.current.files;
-        const restaurant_id = user.uid;
+        const restaurant_id = user?.uid;
         const storage = getStorage(app)
         const storageRef = ref(storage, `restaurant_imgs/${restaurant_id}.jpg`);
   
@@ -254,19 +255,7 @@ useEffect(() => {
 
   return (
     <>
-      <Container>
-        <div>
-          <div>
-            <Logo src={logo} />
-            <HelpText>Need Help? Contact Us: 080-45664746</HelpText>
-          </div>
-          <Title>Partner with Swiggy</Title>
-          <Subtitle>
-            Get listed on India's leading online food delivery marketplace today
-          </Subtitle>
-          <StyledDivider />
-        </div>
-      </Container>
+      <Header title={"Partner with Swiggy"} subtitle={"Get listed on India's leading online food delivery marketplace today"}/>
 
       <FormContainer>
         <h1

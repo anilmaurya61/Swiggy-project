@@ -7,7 +7,7 @@ const MenuItemWrapper = styled.div`
   padding: 16px;
   margin: 16px auto;
   width: 60%;
-  min-height: 10rem;
+  height: 10rem;
   transition: transform 0.3s ease-in-out;
   display: flex;
   justify-content: space-between;
@@ -29,8 +29,7 @@ const LeftColumn = styled.div`
 `;
 
 const RightColumn = styled.div`
-  width: 40%;
-  height: auto;
+  width: 20%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -39,8 +38,8 @@ const RightColumn = styled.div`
 
 
 const ItemImage = styled.img`
-  max-width: 80%;
-  height: auto;
+  height: 100%;
+  width: 100%;
   border-radius: 4px;
 `;
 
@@ -86,18 +85,18 @@ const AddButton = styled.button`
 `;
 
 
-const MenuItem = ({addBtn, restaurantId, itemId, itemName, price, description, itemImage, isVegetarian }) => {
+const MenuItem = ({ addBtn, restaurantId, itemId, itemName, price, description, itemImage, isVegetarian }) => {
   return (
     <MenuItemWrapper>
       <LeftColumn>
-        <VegetarianLabel isVegetarian={isVegetarian} src={veg} alt="Vegetarian" />
+        <VegetarianLabel isVegetarian={!isVegetarian} src={veg} alt="Vegetarian" />
         <ItemName>{itemName}</ItemName>
         <Price>₹{price}</Price>
         <Description>{description}</Description>
       </LeftColumn>
       <RightColumn>
         <ItemImage src={itemImage} alt={itemName} />
-       {addBtn && <AddButton>ADD</AddButton>}
+        {addBtn && <AddButton>ADD</AddButton>}
       </RightColumn>
     </MenuItemWrapper>
   );

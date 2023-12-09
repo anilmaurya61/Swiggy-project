@@ -66,7 +66,7 @@ const MenuItems = () => {
   )
 }
 
-const Tabs = () => {
+const Tabs = ({restaurantData}) => {
   const [activeTab, setActiveTab] = useState('orders');
 
   const handleTabClick = (tab) => {
@@ -87,7 +87,7 @@ const Tabs = () => {
 
       {activeTab === 'orders' && <OrdersComponent />}
       {activeTab === 'menu' && <MenuItems />}
-      {activeTab === 'details' && <RestaurantDetailsComponent />}
+      {activeTab === 'details' && <RestaurantDetailsComponent restaurantData = {restaurantData}/>}
     </TabsContainer>
   );
 };
