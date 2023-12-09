@@ -64,7 +64,7 @@ const RestaurantHome = () => {
   }, []);
   return (
     <>
-      <Header title={restaurantData?.restaurantName} subtitle={restaurantData?.restaurantLocation}/>
+      <Header Image = {restaurantData?.image_url} title={restaurantData?.restaurantName} subtitle={restaurantData?.restaurantLocation}/>
       <Tabs restaurantData= {restaurantData}/>
     </>
   );

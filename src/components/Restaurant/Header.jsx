@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import img from '../../assets/img.jpeg'
 import logo from '../../assets/logo.png'
 
 
@@ -8,7 +7,7 @@ const Container = styled.div`
   position: sticky;
   top: -340px;
   z-index: 100;
-  background-image: url(${img});
+  background-image: url(${props => Image}); 
   background-size: contain;
   background-position: right;
   background-repeat: no-repeat;
@@ -74,8 +73,8 @@ const FormContainer = styled.div`
   padding-top: 12.9vh;
 `;
 
-const Header = ({title, subtitle}) => {
-  console.log(Title);
+const Header = ({title, subtitle, Image}) => {
+  console.log(Image);
     return (
         <>
             <Container>
