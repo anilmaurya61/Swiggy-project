@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef} from "react";
 import styled from "styled-components";
 import img from "../../assets/img.jpeg";
 import logo from "../../assets/logo.png";
@@ -6,7 +6,29 @@ import TextField from "@mui/material/TextField";
 import UploadButton from "@mui/material/Button";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import LoadingButton from "@mui/lab/LoadingButton";
-
+import { useSelector, useDispatch } from "react-redux";
+import {app} from '../../firebase/firebaseConfig.js';
+import { getStorage, ref, uploadBytes, getDownloadURL} from 'firebase/storage';
+import { useEffect } from 'react';
+import { getFirestore, collection, getDocs } from 'firebase/firestore';
+import {
+  setCity,
+  setRestaurantName,
+  setRestaurantLocation,
+  setCuisine,
+  setIsUploaded,
+  setCityError,
+  setRestaurantNameError,
+  setRestaurantLocationError,
+  setCuisineError,
+  setImageError,
+  selectRestaurantDetails,
+  resetForm,
+  setLoading
+} from "../../feature/restaurant/RestaurantDetailsSlice";
+import { addRestaurantDetailsToFirestore } from "../../firebase/firebaseRestaurantDetails";
+import { useNavigate } from 'react-router-dom';
+import { useUser } from "../../context/authContext.js";
 const Container = styled.div`
   font-family: "Open Sans";
   position: sticky;
@@ -89,94 +111,144 @@ const InputContainer = styled.div`
   width: 24vw;
 `;
 
-const Input = styled.input`
-  font-family: "Open Sans";
-  font-size: 1.25rem;
-  height: 40px;
-  width: 100%;
-  margin-top: 10px;
-`;
-
-const Button = styled.button`
-  background-color: #f68621;
-  border: none;
-  border-radius: 4px;
-  height: 45px;
-  width: 230px;
-  color: white;
-  font-size: 20px;
-  line-height: 24px;
-  font-family: "Open Sans";
-  letter-spacing: 1.5px;
-  cursor: pointer;
-`;
-
-// ... (previous code)
-
 function RestaurantDetails() {
+  const firestore = getFirestore();
+  const user=useUser();
   const fileInputRef = useRef(null);
-  const [isUploaded, setIsUploaded] = useState(false);
-  const [city, setCity] = useState("");
-  const [restaurantName, setRestaurantName] = useState("");
-  const [restaurantLocation, setRestaurantLocation] = useState("");
-  const [cuisine, setCuisine] = useState("");
-  const [cityError, setCityError] = useState("");
-  const [restaurantNameError, setRestaurantNameError] = useState("");
-  const [restaurantLocationError, setRestaurantLocationError] = useState("");
-  const [cuisineError, setCuisineError] = useState("");
-  const [imageError, setImageError] = useState("");
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const {
+    isUploaded,
+    city,
+    restaurantName,
+    restaurantLocation,
+    cuisine,
+    cityError,
+    restaurantNameError,
+    restaurantLocationError,
+    cuisineError,
+    imageError,
+    loading
+  } = useSelector(selectRestaurantDetails);
 
-  const handleClick = () => {
-    fileInputRef.current.click();
+//To see whether user for this email have restaurant or not
+
+
+useEffect(() => {
+  const checkRestaurantExistence = async () => {
+    if (user) {
+      const uid = user.uid;
+      const restaurantCollection = collection(firestore, 'restaurants');
+
+      try {
+        const querySnapshot = await getDocs(restaurantCollection);
+        const restaurantExists = querySnapshot.docs.some(docSnapshot => {
+          const data = docSnapshot.data();
+          return Object.values(data).some(value => value === uid);
+        });
+
+        if(restaurantExists){
+          navigate('/restaurant/');
+        }
+      } catch (error) {
+        console.error('Error checking restaurant existence:', error);
+      }
+    }
   };
 
+  checkRestaurantExistence();
+}, [user, firestore,navigate]);
+
+
+
+
+//function to see image upload
   const handleFileChange = () => {
     const files = fileInputRef.current.files;
 
     if (files.length > 0) {
-      setIsUploaded(true);
-      setImageError("");
+      dispatch(setIsUploaded(true));
+      dispatch(setImageError(""));
     } else {
-      setIsUploaded(false);
-      setImageError("Image is required");
+      dispatch(setIsUploaded(false));
+      dispatch(setImageError("Image is required"));
     }
   };
 
-  const handleRegisterClick = () => {
-    // Validate the form fields
+
+//onclick funtion
+  const handleRegisterClick = async () => {
     if (!city.trim()) {
-      setCityError("City is required");
+      dispatch(setCityError("City is required"));
     } else {
-      setCityError("");
+      dispatch(setCityError(""));
     }
 
     if (!restaurantName.trim()) {
-      setRestaurantNameError("Restaurant Name is required");
+      dispatch(setRestaurantNameError("Restaurant Name is required"));
     } else {
-      setRestaurantNameError("");
+      dispatch(setRestaurantNameError(""));
     }
 
     if (!restaurantLocation.trim()) {
-      setRestaurantLocationError("Restaurant Location is required");
+      dispatch(setRestaurantLocationError("Restaurant Location is required"));
     } else {
-      setRestaurantLocationError("");
+      dispatch(setRestaurantLocationError(""));
     }
-    
+
     if (!cuisine.trim()) {
-      setCuisineError("Cuisine is required");
+      dispatch(setCuisineError("Cuisine is required"));
     } else {
-      setCuisineError("");
+      dispatch(setCuisineError(""));
     }
 
-    // Validate the image upload
     if (!isUploaded) {
-      setImageError("Image is required");
+      dispatch(setImageError("Image is required"));
     }
 
-    // Proceed with registration if all fields are filled
-    if (city && restaurantName && restaurantLocation && isUploaded) {
-      // Handle registration logic here
-      console.log("Registration successful!");
+    if (city && restaurantName && restaurantLocation && cuisine&& isUploaded) {
+
+      const files = fileInputRef.current.files;
+        const restaurant_id = user.uid;
+        const storage = getStorage(app)
+        const storageRef = ref(storage, `restaurant_imgs/${restaurant_id}.jpg`);
+  
+        const metadata = {
+          contentType: 'image/jpeg',
+        };
+    
+        try {
+          dispatch(setLoading(true));
+  
+          const snapshot = await uploadBytes(storageRef, files[0], metadata);
+          console.log('File uploaded successfully');
+  
+          const image_url = await getDownloadURL(storageRef);
+          console.log('File download URL:', image_url);
+
+
+          const restaurantDetails = {
+            restaurant_id,
+            city,
+            restaurantName,
+            restaurantLocation,
+            cuisine,
+            image_url
+          };
+          const success = await addRestaurantDetailsToFirestore(restaurantDetails);
+    
+          if (success) {
+            console.log("Registration successful!");
+            dispatch(resetForm());
+            console.log(restaurantDetails);
+          } else {
+            console.log("Registration failed. Please try again.");
+          }
+          dispatch(setLoading(true));
+          navigate('/restaurant/');
+        } catch (error) {
+          console.error('Error:', error);
+        }
     }
   };
 
@@ -217,7 +289,7 @@ function RestaurantDetails() {
               style={{ display: "block", marginTop: "10px", width: "25vw" }}
               id="outlined-required"
               InputProps={{ style: { width: "24vw" } }}
-              onChange={(e) => setCity(e.target.value)}
+              onChange={(e) => dispatch(setCity(e.target.value))}
               error={!!cityError}
               helperText={cityError}
             />
@@ -232,7 +304,7 @@ function RestaurantDetails() {
               style={{ display: "block", marginTop: "10px", width: "25vw" }}
               id="outlined-required"
               InputProps={{ style: { width: "25vw" } }}
-              onChange={(e) => setRestaurantName(e.target.value)}
+              onChange={(e) => dispatch(setRestaurantName(e.target.value))}
               error={!!restaurantNameError}
               helperText={restaurantNameError}
             />
@@ -247,7 +319,7 @@ function RestaurantDetails() {
               style={{ display: "block", marginTop: "10px" }}
               InputProps={{ style: { width: "24vw" } }}
               id="outlined-required"
-              onChange={(e) => setRestaurantLocation(e.target.value)}
+              onChange={(e) => dispatch(setRestaurantLocation(e.target.value))}
               error={!!restaurantLocationError}
               helperText={restaurantLocationError}
             />
@@ -262,7 +334,7 @@ function RestaurantDetails() {
               style={{ display: "block", marginTop: "10px" }}
               InputProps={{ style: { width: "24vw" } }}
               id="outlined-required"
-              onChange={(e) => setCuisine(e.target.value)}
+              onChange={(e) => dispatch(setCuisine(e.target.value))}
               error={!!cuisineError}
               helperText={cuisineError}
             />
@@ -283,7 +355,6 @@ function RestaurantDetails() {
                 marginTop: "10px",
                 backgroundColor: isUploaded ? "#f68621" : null,
               }}
-              onClick={handleClick}
             >
               <input
                 type="file"
@@ -302,7 +373,7 @@ function RestaurantDetails() {
           </InputContainer>
         </FlexInput>
         <LoadingButton
-          loading={false}
+          loading={loading}
           loadingPosition="start"
           variant="outlined"
           onClick={handleRegisterClick}
