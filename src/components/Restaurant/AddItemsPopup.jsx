@@ -1,13 +1,26 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Button from '@mui/material/Button';
-import {Close as CloseIcon, Add as AddIcon} from '@mui/icons-material';
+import { Close as CloseIcon, Add as AddIcon } from '@mui/icons-material';
 import TextField from '@mui/material/TextField';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { IconButton, RadioGroup, FormControlLabel, Radio } from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
-import { addMenuItem } from '../../firebase/firebaseRestaurantServices'
 import uniqid from 'uniqid';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  setField,
+  setCheckbox,
+  setError,
+  setLoading,
+  clearForm,
+  setImage,
+  addItems
+} from '../../feature/restaurant/RestaurantHomeSlice';
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { app } from '../../firebase/auth'
+import {addMenuItem} from '../../firebase/firestoreServices'
+
 
 const BlurredBackground = styled.div`
   position: fixed;
@@ -62,54 +75,66 @@ const RadioContainer = styled.div`
 `;
 
 const AddItemsPopup = ({ open, onClose }) => {
-  const [itemName, setItemName] = useState('');
-  const [price, setPrice] = useState('');
-  const [description, setDescription] = useState('');
-  const [isVegetarian, setIsVegetarian] = useState(false);
-  const [imageName, setImageName] = useState('');
-  const [itemNameError, setItemNameError] = useState('');
-  const [priceError, setPriceError] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
+  const [file, setFile] = useState(null);
+  const dispatch = useDispatch();
+  const AddItems = useSelector((state) => state.AddItems);
+
 
   const handleIsVegetarian = () => {
-    setIsVegetarian(!isVegetarian)
-  }
+    dispatch(setCheckbox({ name: 'isVegetarian', checked: !AddItems.isVegetarian }));
+  };
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
-
-    if (name === 'itemName') {
-      setItemName(value);
-      setItemNameError('');
-    } else if (name === 'price') {
-      setPrice(value);
-      setPriceError('');
-    } else if (name === 'description') {
-      setDescription(value);
-    } else if (name === 'isVegetarian') {
-      setIsVegetarian(event.target.checked);
-    }
+    dispatch(setField({ name, value }));
   };
 
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
-    setImageName(file ? file.name : '');
+    setFile(file);
   };
 
   const handleAddItem = async () => {
+    const { itemName, price, description, isVegetarian, itemImage } = AddItems;
+
+
     if (!itemName) {
-      setItemNameError('Item name cannot be empty');
+      dispatch(setError({ name: 'itemName', error: 'Item name cannot be empty' }));
       return;
     }
 
     if (isNaN(price) || price === '') {
-      setPriceError('Price must be a valid number');
+      dispatch(setError({ name: 'price', error: 'Price must be a valid number' }));
       return;
     }
-    setIsLoading(true);
-    await addMenuItem({ "restaurantId": uniqid(), "itemId": uniqid(), "itemName": itemName, "price": price, "description": description, "isVegetarian": isVegetarian })
-    setIsLoading(false);
-    onClose();
+    if (file) {
+      const itemId = uniqid();
+      const storage = getStorage(app)
+      const storageRef = ref(storage, `itemImages/${itemId}.jpg`);
+
+      const metadata = {
+        contentType: 'image/jpeg',
+      };
+
+      try {
+        dispatch(setLoading(true));
+
+        const snapshot = await uploadBytes(storageRef, file, metadata);
+        console.log('File uploaded successfully');
+
+        const url = await getDownloadURL(storageRef);
+        console.log('File download URL:', url);
+
+        await addMenuItem({ "restaurantId": uniqid(), "itemId": itemId, "itemName": itemName, "price": price, "description": description, "isVegetarian": isVegetarian, "itemImage": url })
+        dispatch(addItems({ "restaurantId": uniqid(), "itemId": itemId, "itemName": itemName, "price": price, "description": description, "isVegetarian": isVegetarian, "itemImage": url }));
+        dispatch(setLoading(false));
+        onClose();
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    }
+   
+    dispatch(clearForm());
   };
 
   return (
@@ -125,10 +150,10 @@ const AddItemsPopup = ({ open, onClose }) => {
             name="itemName"
             label="Item Name"
             variant="standard"
-            value={itemName}
+            value={AddItems.itemName}
             onChange={handleInputChange}
-            error={Boolean(itemNameError)}
-            helperText={itemNameError}
+            error={Boolean(AddItems.itemNameError)}
+            helperText={AddItems.itemNameError}
             fullWidth
             margin="normal"
           />
@@ -138,10 +163,10 @@ const AddItemsPopup = ({ open, onClose }) => {
             name="price"
             label="Price"
             variant="standard"
-            value={price}
+            value={AddItems.price}
             onChange={handleInputChange}
-            error={Boolean(priceError)}
-            helperText={priceError}
+            error={Boolean(AddItems.priceError)}
+            helperText={AddItems.priceError}
             fullWidth
             margin="normal"
           />
@@ -151,7 +176,7 @@ const AddItemsPopup = ({ open, onClose }) => {
           name="description"
           label="Description"
           variant="standard"
-          value={description}
+          value={AddItems.description}
           onChange={handleInputChange}
           fullWidth
           multiline
@@ -161,7 +186,7 @@ const AddItemsPopup = ({ open, onClose }) => {
         <RadioContainer>
           <RadioGroup
             row
-            value={!isVegetarian ? 'vegetarian' : 'non-vegetarian'}
+            value={!AddItems.isVegetarian ? 'vegetarian' : 'non-vegetarian'}
             onChange={() => handleIsVegetarian()}
           >
             <FormControlLabel
@@ -192,10 +217,10 @@ const AddItemsPopup = ({ open, onClose }) => {
           <input type="file" accept="image/*" onChange={handleImageUpload} />
         </UploadButton>
         <LoadingButton
-          loading = {isLoading}
+          loading={AddItems.isLoading}
           loadingPosition="start"
           startIcon={<AddIcon />}
-          variant="outlined" sx={{ color: "#fff", backgroundColor: "#f68621" }} onClick={handleAddItem}>
+          variant="outlined" color='success' sx={{ color: "#fff", backgroundColor: "#f68621" }} onClick={handleAddItem}>
           Add Item
         </LoadingButton>
       </PopupContainer>
