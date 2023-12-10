@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 import {
   Search as SearchIcon,
   LocalOfferOutlined as OfferIcon,
@@ -44,7 +45,7 @@ const StyledSpan = styled.span`
   cursor: pointer;
 `;
 
-const HeaderComponent = () => {
+const HeaderComponent = ({prop}) => {
   const [Auth, setAuth] = useState('Login');
 
   function authentication() {
@@ -59,10 +60,12 @@ const HeaderComponent = () => {
         </StyledLogo>
         <StyledUl>
           <li>
+          <Link to="/search" style={{color:"inherit",textDecoration:"none"}}>
             <StyledIconTextContainer>
-              <SearchIcon />
-              <StyledSpan>Search</StyledSpan>
+              <SearchIcon style={{color:prop}}/>
+              <StyledSpan style={{color:prop}}>Search</StyledSpan>
             </StyledIconTextContainer>
+            </Link>
           </li>
           <li>
             <StyledIconTextContainer>
