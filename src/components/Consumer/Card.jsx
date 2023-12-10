@@ -1,6 +1,7 @@
 import React from 'react';
 import StarPurple500Icon from '@mui/icons-material/StarPurple500';
 import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
 
 const StyledCard = styled.div`
   width: 20rem;
@@ -46,9 +47,10 @@ const RatingTime = styled.div`
 `;
 
 const Card = (params) => {
+  const navigate = useNavigate();
   return (
     <>
-      <StyledCard className="card-container">
+      <StyledCard className="card-container" onClick={()=>navigate('/menu')}>
         <ImgContainer className="img-container">
           <Img src={`https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_660/${params.image}`} alt="" />
         </ImgContainer>

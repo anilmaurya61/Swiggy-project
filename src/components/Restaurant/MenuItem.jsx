@@ -93,6 +93,7 @@ const AddButton = styled.button`
 `;
 
 const MenuItem = ({ addBtn, restaurantId, itemId, itemName, price, description, itemImage, isVegetarian }) => {
+
   const dispatch = useDispatch();
   const [isPopupOpen, setPopupOpen] = useState(false);
 
@@ -113,6 +114,7 @@ const MenuItem = ({ addBtn, restaurantId, itemId, itemName, price, description, 
       console.error("Error deleting item:", error);
     }
   }
+  
   return (
     <>
       {isPopupOpen && <EditItem itemId={itemId}  open={isPopupOpen} onClose={handleClosePopup} />}
