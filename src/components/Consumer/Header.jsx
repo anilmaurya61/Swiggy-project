@@ -32,7 +32,7 @@ const StyledUl = styled.ul`
 
 const StyledLogo = styled.div`
   img {
-    height: 4rem;
+    height: 3rem;
   }
 `;
 
