@@ -50,9 +50,9 @@ const Card = (params) => {
   const navigate = useNavigate();
   return (
     <>
-      <StyledCard className="card-container" onClick={()=>navigate('/menu')}>
+      <StyledCard className="card-container" onClick={()=> navigate(`/menu?name=${params?.name}&location=${params?.location}&cuisines=${params?.cuisines}`)}>
         <ImgContainer className="img-container">
-          <Img src={`https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_660/${params.image}`} alt="" />
+          <Img src={params.image} alt="" />
         </ImgContainer>
         <CardTitle>{params.name}</CardTitle>
         <RatingTime>

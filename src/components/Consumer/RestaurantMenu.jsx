@@ -1,8 +1,9 @@
 import styled from "styled-components";
 import { Search as SearchIcon } from "@mui/icons-material";
-import StarIcon from '@mui/icons-material/Star';
-import DirectionsBikeIcon from '@mui/icons-material/DirectionsBike';
-import Checkbox from '@mui/material/Checkbox';
+import StarIcon from "@mui/icons-material/Star";
+import DirectionsBikeIcon from "@mui/icons-material/DirectionsBike";
+import Checkbox from "@mui/material/Checkbox";
+import { useLocation } from 'react-router-dom';
 const Container1 = styled.div`
   max-width: 800px;
   min-height: 800px;
@@ -27,13 +28,18 @@ const WrapperTop = styled.div`
 const Top1 = styled.div`
   display: flex;
   justify-content: space-between;
-  margin: 0 5px;
+
   color: inherit;
   text-decoration: none;
 `;
-const Span = styled.span`
-  margin: 0 5px;
+const Span1 = styled.span`
+  color: #7e808c;
+  font-size:small;
 `;
+const Span = styled.span`
+  font-size:small;
+`;
+
 
 const FlexDiv = styled.div`
   display: flex;
@@ -62,19 +68,19 @@ const RatingWrapper = styled.div`
   border-radius: 6px;
   text-align: center;
   margin-top: 10px;
-  padding:0px 5px;
+  padding: 0px 5px;
   max-width: 100px;
   float: right;
 `;
 const Rating = styled.div`
   color: #3d9b6d;
-  padding:10px;
+  padding: 10px;
   border-bottom: 1px solid #e9e9eb;
   font-weight: 700;
   margin-bottom: 8px;
   display: block;
-  display:flex;
-  justify-content:center;
+  display: flex;
+  justify-content: center;
   align-items: center;
 `;
 const RatingText = styled.p`
@@ -83,56 +89,56 @@ const RatingText = styled.p`
   font-family: ProximaNovaCondensedRegular, arial, Helvetica Neue, sans-serif;
   font-weight: 600;
 `;
-const BikeContainer=styled.div`
-    display:flex;
-    margin-top: 2px;
-    gap:8px;
-    align-items: center;
-`
-const VegContainer=styled.div`
-    margin-top: 5px;
-`
+const BikeContainer = styled.div`
+  display: flex;
+  margin-top: 2px;
+  gap: 8px;
+  align-items: center;
+`;
+const VegContainer = styled.div`
+  margin-top: 5px;
+`;
 const RestaurantMenu = () => {
-
-
+  const { search } = useLocation();
+  const params = new URLSearchParams(search);
+  const name= params.get("name");
+  const cuisines = params.get("cuisines");
+  const location = params.get("location");
   return (
     <div>
       <Container1>
         <WrapperTop>
           <Top1>
             <div>
-              <Span>Home</Span>
-              <span>/</span>
-              <Span>Kannur Food Point</Span>
-            </div>
-            <div>
-              <SearchIcon />
+              <Span1>Home </Span1>
+              <Span>/</Span>
+              <Span> {name}</Span>
             </div>
           </Top1>
         </WrapperTop>
         <FlexDiv>
           <div>
-            <Heading>Kannur Food Point</Heading>
-            <LightText>Kerala, Chinese</LightText>
-            <LightText>Koramangla, 1km</LightText>
+            <Heading>{name}</Heading>
+            <LightText>{cuisines}</LightText>
+            <LightText>{location}</LightText>
           </div>
 
           <RatingWrapper>
             <Rating>
-            <StarIcon style={{height:"19px"}}/>
+              <StarIcon style={{ height: "19px" }} />
               3.3
             </Rating>
             <RatingText>10k+ ratings</RatingText>
           </RatingWrapper>
         </FlexDiv>
         <BikeContainer>
-        <DirectionsBikeIcon style={{color:"#8b8d97",marginTop:"3px"}}/>
-        <LightText>2.2km | 32rs delivery charge</LightText>
+          <DirectionsBikeIcon style={{ color: "#8b8d97", marginTop: "3px" }} />
+          <LightText>2.2km | 32rs delivery charge</LightText>
         </BikeContainer>
-        <hr style={{color:"lightgray",borderStyle:"dashed"}}></hr>
+        <hr style={{ color: "lightgray", borderStyle: "dashed" }}></hr>
         <VegContainer>
-         <span>Veg Only</span>
-        <Checkbox defaultChecked color="success"/>
+          <span>Veg Only</span>
+          <Checkbox defaultChecked color="success" />
         </VegContainer>
       </Container1>
     </div>
