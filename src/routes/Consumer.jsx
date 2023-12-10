@@ -5,7 +5,7 @@ import LandingPage from '../pages/consumer/LandingPage'
 import SearchPage from '../pages/consumer/SearchPage';
 import RestaurantPage from '../pages/consumer/RestaurantPage';
 import { UserProvider } from '../context/userContext';
-
+import CartPage from '../pages/consumer/cartPage';
 
 const Consumer = () => {
   return (
@@ -16,6 +16,7 @@ const Consumer = () => {
           <Route path="/" element={<ConsumerHome />} />
           <Route path="/search" element={<SearchPage/>}/>
           <Route path="/menu" element={<RestaurantPage/>}/>
+          <Route path="/cart" element={<CartPage />}/>
         </Routes>
       </UserProvider>
     </>
