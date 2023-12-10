@@ -86,6 +86,7 @@ const AddButton = styled.button`
 
 
 const MenuItem = ({ addBtn, restaurantId, itemId, itemName, price, description, itemImage, isVegetarian }) => {
+
   return (
     <MenuItemWrapper>
       <LeftColumn>
