@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+<<<<<<< HEAD
+import { Link } from 'react-router-dom';
+=======
 import { styled as Styled, alpha } from '@mui/material/styles';
 import { useUser } from '../../context/userContext';
 import { useNavigate } from 'react-router-dom';
 import { Button, Avatar, InputBase, IconButton } from '@mui/material';
 import Badge from '@mui/material/Badge';
 
+>>>>>>> 1e23c5516edbc19db615f5dc958c2d62c0e2e40f
 import {
   Search as SearchIcon,
   ShoppingCart as ShoppingCartIcon
@@ -46,6 +50,10 @@ const StyledSpan = styled.span`
   cursor: pointer;
 `;
 
+<<<<<<< HEAD
+const HeaderComponent = ({prop}) => {
+  const [Auth, setAuth] = useState('Login');
+=======
 const Search = Styled('div')(({ theme }) => ({
   position: 'relative',
   borderRadius: theme.shape.borderRadius,
@@ -61,6 +69,7 @@ const Search = Styled('div')(({ theme }) => ({
     width: 'auto',
   },
 }));
+>>>>>>> 1e23c5516edbc19db615f5dc958c2d62c0e2e40f
 
 const SearchIconWrapper = Styled('div')(({ theme }) => ({
   padding: theme.spacing(0, 2),
@@ -111,7 +120,12 @@ const HeaderComponent = () => {
         </StyledLogo>
         <StyledUl>
           <li>
+          <Link to="/search" style={{color:"inherit",textDecoration:"none"}}>
             <StyledIconTextContainer>
+<<<<<<< HEAD
+              <SearchIcon style={{color:prop}}/>
+              <StyledSpan style={{color:prop}}>Search</StyledSpan>
+=======
               <Search>
                 <SearchIconWrapper>
                   <SearchIcon />
@@ -121,7 +135,9 @@ const HeaderComponent = () => {
                   inputProps={{ 'aria-label': 'search' }}
                 />
               </Search>
+>>>>>>> 1e23c5516edbc19db615f5dc958c2d62c0e2e40f
             </StyledIconTextContainer>
+            </Link>
           </li>
           <li>
             <IconButton aria-label="cart">

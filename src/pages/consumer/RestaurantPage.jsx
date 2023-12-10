@@ -5,7 +5,6 @@ import MenuItem from "../../components/Restaurant/MenuItem";
 import { useSelector } from 'react-redux';
 function RestaurantPage(){
     const Items = useSelector((state) => state.AddItems.items)
-    console.log(Items);
     const data=[
         {
           "addBtn": true,
