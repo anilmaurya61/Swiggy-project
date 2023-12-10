@@ -1,17 +1,19 @@
 import React from 'react';
 import styled from 'styled-components';
 import logo from '../../assets/logo.png'
+import headerImage from '../../assets/img.jpeg'
+
 
 const Container = styled.div`
+  /* background-image: url(${headerImage}); */
   position: sticky;
   top: -340px;
   z-index: 100;
-  background-image: url(${props => Image}); 
   background-size: contain;
   background-position: right;
   background-repeat: no-repeat;
   background-color: #000000;
-  height: 478px;
+  height: 278px;
 
   & > div {
     margin-left: 8%;
@@ -22,8 +24,6 @@ const Container = styled.div`
 `;
 
 const Logo = styled.img`
-  height: 9.57562568008705vh;
-  margin-bottom: 4.5vh;
   vertical-align: middle;
   border-style: none;
 `;
@@ -32,17 +32,14 @@ const HelpText = styled.span`
   color: white;
   float: right;
   font-size: 20px;
-  padding-top: 10px;
 `;
 
-const Title = styled.p`
+const Title = styled.h1`
   color: #ffffff;
   font-family: 'Open Sans';
   font-size: 54px;
   font-weight: bold;
   letter-spacing: 0;
-  line-height: 74px;
-  margin-bottom: 10px;
 `;
 
 const Subtitle = styled.span`
@@ -51,7 +48,6 @@ const Subtitle = styled.span`
   font-size: 24px;
   font-weight: bold;
   letter-spacing: 0;
-  line-height: 33px;
 `;
 
 const StyledDivider = styled.div`
@@ -62,32 +58,38 @@ const StyledDivider = styled.div`
   border-bottom: 1px solid #979797;
 `;
 
-const FormContainer = styled.div`
-  margin: 0 8%;
-  padding: 6% 6%;
-  border-bottom-left-radius: 4px;
-  border-bottom-right-radius: 4px;
-  background-color: #ffffff;
-  box-shadow: 0 7px 7px 2px rgba(0, 0, 0, 0.2);
-  padding-top: 12.9vh;
-`;
-
-const Header = ({title, subtitle, Image}) => {
+const Header = ({ title, subtitle, Image }) => {
   console.log(Image);
-    return (
-        <>
-            <Container>
-                <div>
-                    <div>
-                        <Logo src={logo} />
-                        <HelpText>Need Help? Contact Us: 080-45664746</HelpText>
-                    </div>
-                    <Title>{title}</Title>
-                    <Subtitle>{subtitle}</Subtitle>
-                </div>
-            </Container>
-        </>
-    )
+  return (
+    <>
+      <Container style={{
+        backgroundImage: `linear-gradient(to right, rgba(0, 0, 0, 0.5) 50%, transparent 50%), url(${Image})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'right',
+        backgroundRepeat: 'no-repeat',
+        backgroundColor: '#000000',
+        height: '100%',
+        position: 'sticky',
+        top: '-340px',
+        zIndex: '100',
+        overflow: 'hidden',
+        backdropFilter: 'blur(10px)',
+      }}>
+        <div >
+          <div>
+            <HelpText>Need Help? Contact Us: 080-45664746</HelpText>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '2rem' }}>
+            <Logo src={logo} />
+            <div>
+              <Title>{title}</Title>
+              <Subtitle>{subtitle}</Subtitle>
+            </div>
+          </div>
+        </div>
+      </Container>
+    </>
+  )
 }
 
 export default Header

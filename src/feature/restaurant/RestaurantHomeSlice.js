@@ -17,6 +17,19 @@ const AddItems = createSlice({
     addItems: (state, action) => {
       state.items = state.items.concat(action.payload);
     },
+    deleteItem: (state, action) => {
+      const itemId = action.payload;
+      state.items = state.items.filter(item => item.itemId !== itemId);
+    },
+    getItem:(state, action)=>{
+      const itemId = action.payload;
+      const item = state.items.find(item => item.itemId === itemId);
+      state.itemName = item.itemName;
+      state.price = item.price;
+      state.itemImage = item.itemImage;
+      state.description = item.description;
+      state.isVegetarian = item.isVegetarian;
+    },
     setImage: (state, action) => {
       state.itemImage = action.payload;
     },
@@ -54,7 +67,9 @@ export const {
   setLoading,
   clearForm,
   setImage,
-  addItems
+  addItems,
+  deleteItem,
+  getItem
 } = AddItems.actions;
 
 export const AddItemsReducer = AddItems.reducer;
