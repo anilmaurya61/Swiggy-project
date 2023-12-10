@@ -2,15 +2,19 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Card from './Card';
 import data from '../../data.json';
+import { useNavigate } from 'react-router-dom';
 
 const Container = styled.div`
-  margin-top: 5rem;
-  padding: 0 5rem 0 5rem;
+  box-sizing: border-box;
+  width: 100%;
+  margin: 3rem auto;
+  padding: 0 3rem 0 3rem;
 `;
 
 const RestaurantContainer = styled.div`
-  margin-top: 5rem;
-  padding: 0 5rem 0 5rem;
+  box-sizing: border-box;
+  margin:0 auto;
+  padding: 0 3rem 0 3rem;
 `;
 
 const SearchContainer = styled.span`
@@ -43,6 +47,7 @@ const FoodCardsContainer = styled.div`
   margin: 2rem auto;
   display: flex;
   align-items: baseline;
+  justify-content: space-evenly;
   flex-wrap: wrap;
   gap: 1.3rem;
 `;
@@ -50,12 +55,6 @@ const FoodCardsContainer = styled.div`
 const Body = () => {
   const [Restaurant, setRestaurant] = useState([]);
   const [filteredCard, setFilteredCard] = useState([]);
-  const [SearchText, setSearchText] = useState('');
-
-  function searchCard() {
-    const lowercaseSearchText = SearchText.toLowerCase();
-    setFilteredCard(Restaurant.filter((card) => card?.info?.name.toLowerCase().includes(lowercaseSearchText)));
-  }
 
   useEffect(() => {
     setRestaurant(data);
@@ -65,43 +64,7 @@ const Body = () => {
   return (
     <Container>
       <RestaurantContainer>
-        <h1>Restaurants with online food delivery in Bangalore</h1>
-        <SearchContainer>
-          <input
-            type="text"
-            placeholder="Search here ..."
-            value={SearchText}
-            onChange={(e) => {
-              setSearchText(e.target.value);
-              searchCard(e.target.value);
-            }}
-          />
-        </SearchContainer>
-
-        <Button
-          onClick={() => {
-            setFilteredCard(Restaurant.sort((a, b) => {
-              const deliveryTimeA = a?.info?.sla?.deliveryTime || 0;
-              const deliveryTimeB = b?.info?.sla?.deliveryTime || 0;
-              return deliveryTimeA - deliveryTimeB;
-            }));
-          }}
-        >
-          Fast Delivery
-        </Button>
-
-        <Button
-          onClick={() => {
-            setFilteredCard(Restaurant.filter((card) => card.info.avgRating > 4.0));
-          }}
-        >
-          Rating 4.0+
-        </Button>
-
-        <Button>Pure Veg</Button>
-        <Button>Rs. 300-Rs. 600</Button>
-        <Button>Less than Rs. 300</Button>
-
+      <h1>Restaurants with online food delivery in Bangalore</h1>
         <FoodCardsContainer>
           {filteredCard.map((hotel) => (
             <Card

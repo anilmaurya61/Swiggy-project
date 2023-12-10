@@ -2,9 +2,10 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 
 const StyledCarouselContainer = styled.div`
-  width: 90%;
+ box-sizing: border-box;
+  width: 100%;
   margin:0 auto;
-  padding: 0 5rem 0 5rem;
+  padding: 0 6rem 0 6rem;
 `;
 
 const StyledHeader = styled.div`
@@ -42,8 +43,9 @@ const Carousel = () => {
     "https://res.cloudinary.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_850,h_504/rng/md/carousel/production/731031544495581f1d6884624aa3ecf5",
     "https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_850,h_504/rng/md/carousel/production/d59fb2bd4af3a0850d426a658172f899",
     "https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_850,h_504/rng/md/carousel/production/071d07e5d5deb5e3da47feef18fb14fc",
-    "https://res.cloudinary.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_850,h_504/rng/md/carousel/production/731031544495581f1d6884624aa3ecf5",
-    "https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_850,h_504/rng/md/carousel/production/4bb5e5e0ff6ee6d8465bb57a439085c1"
+    "https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_850,h_504/rng/md/carousel/production/4bb5e5e0ff6ee6d8465bb57a439085c1",
+    "https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_850,h_504/rng/md/carousel/production/3057f3335c3ed7c84370f98fa3c34220",
+    "https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_850,h_504/rng/md/carousel/production/7b9223e91eecfba8be24c32b692170af",
   ];
 
   useEffect(() => {
