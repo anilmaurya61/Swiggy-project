@@ -3,7 +3,6 @@ import StarPurple500Icon from '@mui/icons-material/StarPurple500';
 import styled from 'styled-components';
 
 const StyledCard = styled.div`
-  height: 30rem;
   width: 20rem;
   padding: 1rem;
   border-radius: 1rem;
@@ -55,7 +54,7 @@ const Card = (params) => {
         </ImgContainer>
         <CardTitle>{params.name}</CardTitle>
         <RatingTime>
-          {<StarPurple500Icon />} {params.avgRating} - {params.deliveryTime}
+          {<StarPurple500Icon sx={{ color: 'green' }} />} {params.avgRating} - {params.deliveryTime}
         </RatingTime>
         <p>{params.cuisines}</p>
       </StyledCard>
