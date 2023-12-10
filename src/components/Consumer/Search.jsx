@@ -79,7 +79,7 @@ function Search() {
       <FieledContainer>
         <FieledContainer2>
           <FieledContainer3>
-            <Input placeholder="search for restaurants and food"></Input>
+            <Input placeholder="Search for restaurants and food"></Input>
             <SearchIcon></SearchIcon>
           </FieledContainer3>
         </FieledContainer2>
