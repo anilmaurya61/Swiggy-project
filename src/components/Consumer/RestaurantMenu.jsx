@@ -93,10 +93,12 @@ const VegContainer=styled.div`
     margin-top: 5px;
 `
 const RestaurantMenu = () => {
+
+
   return (
     <div>
       <Container1>
-        <wrapperTop>
+        <WrapperTop>
           <Top1>
             <div>
               <Span>Home</Span>
@@ -107,7 +109,7 @@ const RestaurantMenu = () => {
               <SearchIcon />
             </div>
           </Top1>
-        </wrapperTop>
+        </WrapperTop>
         <FlexDiv>
           <div>
             <Heading>Kannur Food Point</Heading>

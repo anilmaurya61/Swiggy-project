@@ -1,15 +1,11 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-<<<<<<< HEAD
 import { Link } from 'react-router-dom';
-=======
 import { styled as Styled, alpha } from '@mui/material/styles';
 import { useUser } from '../../context/userContext';
 import { useNavigate } from 'react-router-dom';
 import { Button, Avatar, InputBase, IconButton } from '@mui/material';
 import Badge from '@mui/material/Badge';
-
->>>>>>> 1e23c5516edbc19db615f5dc958c2d62c0e2e40f
 import {
   Search as SearchIcon,
   ShoppingCart as ShoppingCartIcon
@@ -49,50 +45,13 @@ const StyledSpan = styled.span`
   margin-left: 8px;
   cursor: pointer;
 `;
-
-<<<<<<< HEAD
+const Search=styled.div`
+  margin-top: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`
 const HeaderComponent = ({prop}) => {
-  const [Auth, setAuth] = useState('Login');
-=======
-const Search = Styled('div')(({ theme }) => ({
-  position: 'relative',
-  borderRadius: theme.shape.borderRadius,
-  backgroundColor: alpha(theme.palette.common.black, 0.10),
-  '&:hover': {
-    backgroundColor: alpha(theme.palette.common.black, 0.15),
-  },
-  marginRight: theme.spacing(2),
-  marginLeft: 0,
-  width: '100%',
-  [theme.breakpoints.up('sm')]: {
-    marginLeft: theme.spacing(3),
-    width: 'auto',
-  },
-}));
->>>>>>> 1e23c5516edbc19db615f5dc958c2d62c0e2e40f
-
-const SearchIconWrapper = Styled('div')(({ theme }) => ({
-  padding: theme.spacing(0, 2),
-  height: '100%',
-  position: 'absolute',
-  pointerEvents: 'none',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-}));
-
-const StyledInputBase = Styled(InputBase)(({ theme }) => ({
-  color: 'inherit',
-  '& .MuiInputBase-input': {
-    padding: theme.spacing(1, 1, 1, 0),
-    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-    transition: theme.transitions.create('width'),
-    width: '100%',
-    [theme.breakpoints.up('md')]: {
-      width: '20ch',
-    },
-  },
-}));
 
 const StyledBadge = Styled(Badge)(({ theme }) => ({
   '& .MuiBadge-badge': {
@@ -103,7 +62,6 @@ const StyledBadge = Styled(Badge)(({ theme }) => ({
   },
 }));
 
-const HeaderComponent = () => {
   const { user, Login, Logout } = useUser();
   const navigate = useNavigate();
 
@@ -120,24 +78,9 @@ const HeaderComponent = () => {
         </StyledLogo>
         <StyledUl>
           <li>
-          <Link to="/search" style={{color:"inherit",textDecoration:"none"}}>
-            <StyledIconTextContainer>
-<<<<<<< HEAD
-              <SearchIcon style={{color:prop}}/>
-              <StyledSpan style={{color:prop}}>Search</StyledSpan>
-=======
-              <Search>
-                <SearchIconWrapper>
-                  <SearchIcon />
-                </SearchIconWrapper>
-                <StyledInputBase
-                  placeholder="Search…"
-                  inputProps={{ 'aria-label': 'search' }}
-                />
-              </Search>
->>>>>>> 1e23c5516edbc19db615f5dc958c2d62c0e2e40f
-            </StyledIconTextContainer>
-            </Link>
+           <Link to="/search" style={{color:"inherit",textDecoration:"none"}}>
+           <Search><SearchIcon style={{marginRight:"4px"}}/> Search</Search> 
+            </Link> 
           </li>
           <li>
             <IconButton aria-label="cart">
