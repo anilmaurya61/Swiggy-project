@@ -32,7 +32,7 @@ const StyledUl = styled.ul`
 
 const StyledLogo = styled.div`
   img {
-    height: 4rem;
+    height: 3rem;
   }
 `;
 
@@ -45,22 +45,22 @@ const StyledSpan = styled.span`
   margin-left: 8px;
   cursor: pointer;
 `;
-const Search=styled.div`
+const Search = styled.div`
   margin-top: 8px;
   display: flex;
   justify-content: center;
   align-items: center;
 `
-const HeaderComponent = ({prop}) => {
+const HeaderComponent = ({ prop }) => {
 
-const StyledBadge = Styled(Badge)(({ theme }) => ({
-  '& .MuiBadge-badge': {
-    right: -3,
-    top: 5,
-    border: `2px solid ${theme.palette.background.paper}`,
-    padding: '0 4px',
-  },
-}));
+  const StyledBadge = Styled(Badge)(({ theme }) => ({
+    '& .MuiBadge-badge': {
+      right: -3,
+      top: 5,
+      border: `2px solid ${theme.palette.background.paper}`,
+      padding: '0 4px',
+    },
+  }));
 
   const { user, Login, Logout } = useUser();
   const navigate = useNavigate();
@@ -73,14 +73,16 @@ const StyledBadge = Styled(Badge)(({ theme }) => ({
   return (
     <StyledNav>
       <StyledContainer className="container">
-        <StyledLogo className="logo">
-          <img src="https://cdn.worldvectorlogo.com/logos/swiggy-1.svg" alt="" />
-        </StyledLogo>
+        
+          <StyledLogo className="logo">
+          <Link to='/'> <img src="https://cdn.worldvectorlogo.com/logos/swiggy-1.svg" alt="swiggy-logo" /> </Link>
+          </StyledLogo>
+       
         <StyledUl>
           <li>
-           <Link to="/search" style={{color:"inherit",textDecoration:"none"}}>
-           <Search><SearchIcon style={{marginRight:"4px"}}/> Search</Search> 
-            </Link> 
+            <Link to="/search" style={{ color: "inherit", textDecoration: "none" }}>
+              <Search><SearchIcon style={{ marginRight: "4px" }} /> Search</Search>
+            </Link>
           </li>
           <li>
             <IconButton aria-label="cart">
