@@ -26,7 +26,6 @@ const LandinPage = () => {
       <Herosection openDrawer={toggleDrawer}/>
       <Features />
       <Restaurants />
-      <Button onClick={toggleDrawer('right', true)}>Open Right Drawer</Button>
       <DrawerComponent
         anchor="right"
         isOpen={state['right']}
