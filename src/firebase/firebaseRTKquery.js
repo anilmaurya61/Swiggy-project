@@ -11,8 +11,9 @@ export const menuItemsApi = createApi({
         try {
           const menuItemRef = doc(db, "menus", menuItemId);
           const menuItemDoc = await getDoc(menuItemRef);
-
+         
           if (menuItemDoc.exists()) {
+            console.log(menuItemDoc.data());
             return { data: menuItemDoc.data() };
           } else {
             throw new Error("Menu item not found");

@@ -93,7 +93,6 @@ const AddButton = styled.button`
 `;
 
 const MenuItem = ({ addBtn, restaurantId, itemId, itemName, price, description, itemImage, isVegetarian }) => {
-
   const dispatch = useDispatch();
   const [isPopupOpen, setPopupOpen] = useState(false);
 

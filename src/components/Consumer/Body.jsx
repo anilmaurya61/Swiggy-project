@@ -54,8 +54,6 @@ const FoodCardsContainer = styled.div`
 
 const Body = () => {
   const { data: restaurants, error, isLoading } = useGetAllRestaurantsQuery();
-   
-  console.log(restaurants);
   return (
     <Container>
       <RestaurantContainer>
@@ -70,6 +68,7 @@ const Body = () => {
               name={hotel?.restaurantName}
               avgRating={4.4}
               deliveryTime={hotel?.info?.sla?.slaString || '10 mins'}
+              id={hotel?.restaurant_id}
             />
           ))}
         </FoodCardsContainer>

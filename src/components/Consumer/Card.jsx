@@ -50,7 +50,7 @@ const Card = (params) => {
   const navigate = useNavigate();
   return (
     <>
-      <StyledCard className="card-container" onClick={()=> navigate(`/menu?name=${params?.name}&location=${params?.location}&cuisines=${params?.cuisines}`)}>
+      <StyledCard className="card-container" onClick={()=> navigate(`/menu?name=${params?.name}&location=${params?.location}&cuisines=${params?.cuisines}&id=${params?.id}`)}>
         <ImgContainer className="img-container">
           <Img src={params.image} alt="" />
         </ImgContainer>
