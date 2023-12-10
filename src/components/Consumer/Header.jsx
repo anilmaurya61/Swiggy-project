@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import { styled as Styled, alpha } from '@mui/material/styles';
+import { useUser } from '../../context/userContext';
+import { useNavigate } from 'react-router-dom';
+import { Button, Avatar, InputBase, IconButton } from '@mui/material';
+import Badge from '@mui/material/Badge';
+
 import {
   Search as SearchIcon,
-  LocalOfferOutlined as OfferIcon,
-  HelpOutlineOutlined as HelpIcon,
-  PersonOutlineOutlined as PersonIcon,
-  AddShoppingCartOutlined as CartIcon,
+  ShoppingCart as ShoppingCartIcon
 } from '@mui/icons-material';
 
 const StyledNav = styled.nav`
@@ -24,8 +27,7 @@ const StyledContainer = styled.div`
 const StyledUl = styled.ul`
   list-style: none;
   display: flex;
-  justify-content: space-around;
-  width: 60%;
+  gap: 1rem;
 `;
 
 const StyledLogo = styled.div`
@@ -44,11 +46,61 @@ const StyledSpan = styled.span`
   cursor: pointer;
 `;
 
-const HeaderComponent = () => {
-  const [Auth, setAuth] = useState('Login');
+const Search = Styled('div')(({ theme }) => ({
+  position: 'relative',
+  borderRadius: theme.shape.borderRadius,
+  backgroundColor: alpha(theme.palette.common.black, 0.10),
+  '&:hover': {
+    backgroundColor: alpha(theme.palette.common.black, 0.15),
+  },
+  marginRight: theme.spacing(2),
+  marginLeft: 0,
+  width: '100%',
+  [theme.breakpoints.up('sm')]: {
+    marginLeft: theme.spacing(3),
+    width: 'auto',
+  },
+}));
 
-  function authentication() {
-    setAuth(Auth === 'Login' ? 'Logout' : 'Login');
+const SearchIconWrapper = Styled('div')(({ theme }) => ({
+  padding: theme.spacing(0, 2),
+  height: '100%',
+  position: 'absolute',
+  pointerEvents: 'none',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+}));
+
+const StyledInputBase = Styled(InputBase)(({ theme }) => ({
+  color: 'inherit',
+  '& .MuiInputBase-input': {
+    padding: theme.spacing(1, 1, 1, 0),
+    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+    transition: theme.transitions.create('width'),
+    width: '100%',
+    [theme.breakpoints.up('md')]: {
+      width: '20ch',
+    },
+  },
+}));
+
+const StyledBadge = Styled(Badge)(({ theme }) => ({
+  '& .MuiBadge-badge': {
+    right: -3,
+    top: 5,
+    border: `2px solid ${theme.palette.background.paper}`,
+    padding: '0 4px',
+  },
+}));
+
+const HeaderComponent = () => {
+  const { user, Login, Logout } = useUser();
+  const navigate = useNavigate();
+
+  function handleLogout() {
+    Logout();
+    navigate('/')
   }
 
   return (
@@ -60,33 +112,34 @@ const HeaderComponent = () => {
         <StyledUl>
           <li>
             <StyledIconTextContainer>
-              <SearchIcon />
-              <StyledSpan>Search</StyledSpan>
+              <Search>
+                <SearchIconWrapper>
+                  <SearchIcon />
+                </SearchIconWrapper>
+                <StyledInputBase
+                  placeholder="Search…"
+                  inputProps={{ 'aria-label': 'search' }}
+                />
+              </Search>
             </StyledIconTextContainer>
           </li>
           <li>
-            <StyledIconTextContainer>
-              <OfferIcon />
-              <StyledSpan>Offer</StyledSpan>
-            </StyledIconTextContainer>
+            <IconButton aria-label="cart">
+              <StyledBadge badgeContent={1} color="secondary">
+                <ShoppingCartIcon />
+              </StyledBadge>
+            </IconButton>
           </li>
           <li>
-            <StyledIconTextContainer>
-              <HelpIcon />
-              <StyledSpan>Help</StyledSpan>
-            </StyledIconTextContainer>
+            {user && (
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                <Avatar alt="Travis Howard" src={user.photoURL} />
+                <StyledSpan>{user.displayName}</StyledSpan>
+              </div>
+            )}
           </li>
           <li>
-            <StyledIconTextContainer>
-              <PersonIcon />
-              <StyledSpan onClick={authentication}>{Auth}</StyledSpan>
-            </StyledIconTextContainer>
-          </li>
-          <li>
-            <StyledIconTextContainer>
-              <CartIcon />
-              <StyledSpan>Cart</StyledSpan>
-            </StyledIconTextContainer>
+            <Button variant='outlined' onClick={handleLogout}>Logout</Button>
           </li>
         </StyledUl>
       </StyledContainer>
