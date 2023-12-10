@@ -13,7 +13,8 @@ import {
 } from '../../feature/restaurant/RestaurantHomeSlice';
 
 const OrdersContainer = styled.div`
-  max-width: 100%;
+  max-width: 60%;
+  margin: 2rem auto;
 `;
 
 const OrdersTable = styled.table`
@@ -81,9 +82,7 @@ const OrdersComponent = () => {
                     <tr>
                         <TableHeader>Order ID</TableHeader>
                         <TableHeader>Address</TableHeader>
-                        <TableHeader>Status</TableHeader>
                         <TableHeader>Timestamp</TableHeader>
-                        <TableHeader>Total Price</TableHeader>
                     </tr>
                 </thead>
                 <tbody>
@@ -91,20 +90,7 @@ const OrdersComponent = () => {
                         <TableRow key={order.orderId}>
                             <TableCell>{order.orderId}</TableCell>
                             <TableCell>{order.address}</TableCell>
-                            <TableCell>
-                                <Select
-                                    value={selectedStatus}
-                                    onChange={(e) => {
-                                        setSelectedStatus(e.target.value);
-                                    }}
-                                >
-                                    <option value="Pending">Pending</option>
-                                    <option value="Shipped">Shipped</option>
-                                    <option value="Delivered">Delivered</option>
-                                </Select>
-                            </TableCell>
                             <TableCell>{order.timestamp}</TableCell>
-                            <TableCell>${order.totalPrice}</TableCell>
                         </TableRow>
                     ))}
                 </tbody>
