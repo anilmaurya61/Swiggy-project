@@ -1,6 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import veg from '../../assets/veg-icon.png';
+import { Delete as DeleteIcon, Edit as EditIcon } from '@mui/icons-material';
+import { Box, IconButton } from '@mui/material';
+import { deleteMenuItem } from '../../firebase/firestoreServices'
+import { deleteItem } from '../../feature/restaurant/RestaurantHomeSlice'
+import { useDispatch } from 'react-redux';
+import EditItem from './EditItem';
+
+
 
 const MenuItemWrapper = styled.div`
   border-top: 1px solid #ccc;
@@ -85,19 +93,46 @@ const AddButton = styled.button`
 `;
 
 const MenuItem = ({ addBtn, restaurantId, itemId, itemName, price, description, itemImage, isVegetarian }) => {
+  const dispatch = useDispatch();
+  const [isPopupOpen, setPopupOpen] = useState(false);
+
+  const handleClosePopup = () => {
+    setPopupOpen(false);
+  };
+
+  const handleEdit = async () => {
+    setPopupOpen(true);
+  }
+
+  const handleDelete = async () => {
+    console.log(restaurantId, itemId);
+    try {
+      dispatch(deleteItem(itemId))
+      await deleteMenuItem(restaurantId, itemId);
+    } catch (error) {
+      console.error("Error deleting item:", error);
+    }
+  }
   return (
-    <MenuItemWrapper>
-      <LeftColumn>
-        <VegetarianLabel isVegetarian={!isVegetarian} src={veg} alt="Vegetarian" />
-        <ItemName>{itemName}</ItemName>
-        <Price>₹{price}</Price>
-        <Description>{description}</Description>
-      </LeftColumn>
-      <RightColumn>
-        <ItemImage src={itemImage} alt={itemName} />
-        {addBtn && <AddButton>ADD</AddButton>}
-      </RightColumn>
-    </MenuItemWrapper>
+    <>
+      {isPopupOpen && <EditItem itemId={itemId}  open={isPopupOpen} onClose={handleClosePopup} />}
+      <MenuItemWrapper>
+        <LeftColumn>
+          <VegetarianLabel isVegetarian={!isVegetarian} src={veg} alt="Vegetarian" />
+          <ItemName>{itemName}</ItemName>
+          <Price>₹{price}</Price>
+          <Description>{description}</Description>
+        </LeftColumn>
+        <RightColumn>
+          <Box>
+            <IconButton onClick={handleDelete}><DeleteIcon /></IconButton>
+            <IconButton onClick={handleEdit}><EditIcon /></IconButton>
+          </Box>
+          <ItemImage src={itemImage} alt={itemName} />
+          {addBtn && <AddButton>ADD</AddButton>}
+        </RightColumn>
+      </MenuItemWrapper>
+    </>
   );
 };
 
