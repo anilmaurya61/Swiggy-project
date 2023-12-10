@@ -6,12 +6,12 @@ import { Navigate, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 const Container = styled.div`
-  width: 100%;
-  margin: 0 auto;
+  width: 60%;
+  margin: 2rem auto;
   padding: 20px;
-  background-color: #f5f5f5;
+  background-color: #fff;
   border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
 `;
 
 const Title = styled.h2`

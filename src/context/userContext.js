@@ -16,7 +16,6 @@ export const UserProvider = ({ children }) => {
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged((authUser) => {
             setUser(authUser);
-            navigate('/');
         });
 
         return () => unsubscribe();
@@ -28,9 +27,7 @@ export const UserProvider = ({ children }) => {
     const Logout = async () => {
         signOut(auth).then(() => {
             navigate('/auth')
-        }).catch((error) => {
-            navigate('/')
-        });
+        })
     };
 
     const value = {

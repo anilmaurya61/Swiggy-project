@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import Card from './Card';
 import data from '../../data.json';
 import { useNavigate } from 'react-router-dom';
-
+import { useGetAllRestaurantsQuery} from '../../firebase/firebaseRTKqueryRestaurants'
 const Container = styled.div`
   box-sizing: border-box;
   width: 100%;
@@ -53,26 +53,22 @@ const FoodCardsContainer = styled.div`
 `;
 
 const Body = () => {
-  const [Restaurant, setRestaurant] = useState([]);
-  const [filteredCard, setFilteredCard] = useState([]);
-
-  useEffect(() => {
-    setRestaurant(data);
-    setFilteredCard(data);
-  }, []);
-
+  const { data: restaurants, error, isLoading } = useGetAllRestaurantsQuery();
+   
+  console.log(restaurants);
   return (
     <Container>
       <RestaurantContainer>
       <h1>Restaurants with online food delivery in Bangalore</h1>
         <FoodCardsContainer>
-          {filteredCard.map((hotel) => (
+          {restaurants&&restaurants.map((hotel) => (
             <Card
-              key={hotel.info.id}
-              image={hotel.info.cloudinaryImageId}
-              cuisines={hotel?.info?.cuisines?.join(',') || ''}
-              name={hotel.info.name}
-              avgRating={hotel.info.avgRating}
+              key={hotel?.restaurant_id}
+              image={hotel?.image_url}
+              cuisines={hotel?.cuisine}
+              location={hotel?.restaurantLocation}
+              name={hotel?.restaurantName}
+              avgRating={4.4}
               deliveryTime={hotel?.info?.sla?.slaString || '10 mins'}
             />
           ))}
