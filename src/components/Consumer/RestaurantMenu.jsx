@@ -5,8 +5,8 @@ import DirectionsBikeIcon from "@mui/icons-material/DirectionsBike";
 import Checkbox from "@mui/material/Checkbox";
 import { useLocation } from 'react-router-dom';
 const Container1 = styled.div`
-  max-width: 800px;
-  margin: 20px auto 0;
+  max-width: 62%;
+  margin: 16px auto;
 `;
 const WrapperTop = styled.div`
   height: 52px;
@@ -103,6 +103,7 @@ const RestaurantMenu = () => {
   const name= params.get("name");
   const cuisines = params.get("cuisines");
   const location = params.get("location");
+
   return (
     <div>
       <Container1>

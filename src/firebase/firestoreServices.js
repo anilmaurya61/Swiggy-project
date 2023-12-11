@@ -55,5 +55,40 @@ const deleteMenuItem = async (restaurantId, itemId) => {
     }
 };
 
+const updateMenuItem = async (updatedItemData) => {
+    try {
+        const menuRef = doc(db, "menus", updatedItemData.restaurantId);
+        const menuSnapshot = await getDoc(menuRef);
 
-export {deleteMenuItem , addMenuItem }
+        if (menuSnapshot.exists()) {
+            const currentMenuData = menuSnapshot.data();
+
+            const existingItems = currentMenuData?.items || [];
+
+            const itemIndex = existingItems.findIndex(item => item.itemId === updatedItemData.itemId);
+
+            if (itemIndex !== -1) {
+                const updatedItems = [
+                    ...existingItems.slice(0, itemIndex),
+                    { ...existingItems[itemIndex], ...updatedItemData },
+                    ...existingItems.slice(itemIndex + 1)
+                ];
+
+                const updatedMenuData = { ...currentMenuData, items: updatedItems };
+
+                await setDoc(menuRef, updatedMenuData);
+
+                console.log(`Item with ID ${updatedItemData.itemId} updated successfully.`);
+            } else {
+                console.log(`Item with ID ${updatedItemData.itemId} not found.`);
+            }
+        } else {
+            console.log(`Menu not found for restaurant ID ${updatedItemData.restaurantId}.`);
+        }
+    } catch (e) {
+        throw e;
+    }
+};
+
+
+export {deleteMenuItem , addMenuItem, updateMenuItem }
