@@ -93,7 +93,7 @@ const AddButton = styled.button`
 `;
 
 const MenuItem = ({ addBtn, restaurantId, itemId, itemName, price, description, itemImage, isVegetarian }) => {
-
+  console.log("AddBtn", addBtn)
   const dispatch = useDispatch();
   const [isPopupOpen, setPopupOpen] = useState(false);
 
@@ -126,10 +126,10 @@ const MenuItem = ({ addBtn, restaurantId, itemId, itemName, price, description, 
           <Description>{description}</Description>
         </LeftColumn>
         <RightColumn>
-          <Box>
+          {addBtn && <Box>
             <IconButton onClick={handleDelete}><DeleteIcon /></IconButton>
             <IconButton onClick={handleEdit}><EditIcon /></IconButton>
-          </Box>
+          </Box>}
           <ItemImage src={itemImage} alt={itemName} />
           {addBtn && <AddButton>ADD</AddButton>}
         </RightColumn>
