@@ -69,6 +69,7 @@ const HeaderComponent = ({ prop }) => {
     Logout();
     navigate('/')
   }
+  console.log(prop);
 
   return (
     <StyledNav>
@@ -81,7 +82,7 @@ const HeaderComponent = ({ prop }) => {
         <StyledUl>
           <li>
             <Link to="/search" style={{ color: "inherit", textDecoration: "none" }}>
-              <Search><SearchIcon style={{ marginRight: "4px" }} /> Search</Search>
+              <Search style={{color:prop}}><SearchIcon style={{ marginRight: "4px"}} /> Search</Search>
             </Link>
           </li>
           <li>

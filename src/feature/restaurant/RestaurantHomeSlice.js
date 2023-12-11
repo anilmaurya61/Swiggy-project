@@ -1,15 +1,15 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
 
 const AddItems = createSlice({
-  name: 'form',
+  name: "form",
   initialState: {
     items: [],
-    itemName: '',
-    price: '',
-    description: '',
+    itemName: "",
+    price: "",
+    description: "",
     isVegetarian: false,
-    itemNameError: '',
-    priceError: '',
+    itemNameError: "",
+    priceError: "",
     isLoading: false,
     itemImage: null,
   },
@@ -19,11 +19,27 @@ const AddItems = createSlice({
     },
     deleteItem: (state, action) => {
       const itemId = action.payload;
-      state.items = state.items.filter(item => item.itemId !== itemId);
+      state.items = state.items.filter((item) => item.itemId !== itemId);
     },
-    getItem:(state, action)=>{
+    updateItem: (state, action) => {
+      const updatedItemData = action.payload;
+
+      const itemIndex = state.items.findIndex(
+        (item) => item.itemId === updatedItemData.itemId
+      );
+
+      if (itemIndex !== -1) {
+        const updatedItems = [
+          ...state.items.slice(0, itemIndex),
+          updatedItemData,
+          ...state.items.slice(itemIndex + 1),
+        ];
+        state.items = updatedItems;
+      }
+    },
+    getItem: (state, action) => {
       const itemId = action.payload;
-      const item = state.items.find(item => item.itemId === itemId);
+      const item = state.items.find((item) => item.itemId === itemId);
       state.itemName = item.itemName;
       state.price = item.price;
       state.itemImage = item.itemImage;
@@ -49,12 +65,12 @@ const AddItems = createSlice({
       state.isLoading = action.payload;
     },
     clearForm: (state) => {
-      state.itemName = '';
-      state.price = '';
-      state.description = '';
+      state.itemName = "";
+      state.price = "";
+      state.description = "";
       state.isVegetarian = false;
-      state.itemNameError = '';
-      state.priceError = '';
+      state.itemNameError = "";
+      state.priceError = "";
       state.isLoading = false;
     },
   },
@@ -69,7 +85,8 @@ export const {
   setImage,
   addItems,
   deleteItem,
-  getItem
+  getItem,
+  updateItem
 } = AddItems.actions;
 
 export const AddItemsReducer = AddItems.reducer;
@@ -77,10 +94,10 @@ export const AddItemsReducer = AddItems.reducer;
 // ordersSlice
 
 const ordersSlice = createSlice({
-  name: 'orders',
+  name: "orders",
   initialState: {
     orders: [],
-    selectedStatus: '',
+    selectedStatus: "",
     selectedOrderId: null,
     currentPage: 1,
     pageSize: 5,

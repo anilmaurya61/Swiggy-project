@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
-import Button from '@mui/material/Button';
-import { Close as CloseIcon, Add as AddIcon } from '@mui/icons-material';
-import TextField from '@mui/material/TextField';
-import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-import { IconButton, RadioGroup, FormControlLabel, Radio } from '@mui/material';
-import LoadingButton from '@mui/lab/LoadingButton';
-import uniqid from 'uniqid';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useEffect, useState } from "react";
+import styled from "styled-components";
+import Button from "@mui/material/Button";
+import { Close as CloseIcon, Add as AddIcon } from "@mui/icons-material";
+import TextField from "@mui/material/TextField";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import { IconButton, RadioGroup, FormControlLabel, Radio } from "@mui/material";
+import LoadingButton from "@mui/lab/LoadingButton";
+import { updateMenuItem } from "../../firebase/firestoreServices";
+import { useDispatch, useSelector } from "react-redux";
 import {
   setField,
   setCheckbox,
@@ -16,13 +16,13 @@ import {
   clearForm,
   setImage,
   addItems,
-  getItem
-} from '../../feature/restaurant/RestaurantHomeSlice';
+  getItem,
+  updateItem,
+} from "../../feature/restaurant/RestaurantHomeSlice";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { app } from '../../firebase/auth'
-import { addMenuItem } from '../../firebase/firestoreServices'
-import { useUser } from '../../context/authContext';
-
+import { app } from "../../firebase/auth";
+import { addMenuItem } from "../../firebase/firestoreServices";
+import { useUser } from "../../context/authContext";
 
 const BlurredBackground = styled.div`
   position: fixed;
@@ -32,7 +32,7 @@ const BlurredBackground = styled.div`
   height: 100%;
   backdrop-filter: blur(5px);
   z-index: 999;
-  display: ${(props) => (props.open ? 'block' : 'none')};
+  display: ${(props) => (props.open ? "block" : "none")};
 `;
 
 const PopupContainer = styled.div`
@@ -76,18 +76,38 @@ const RadioContainer = styled.div`
   display: flex;
 `;
 
-const EditItem = ({itemId, open, onClose }) => {
-  const user = useUser();
+const EditItem = ({
+  itemId,
+  itemName,
+  description,
+  isVegetarian,
+  price,
+  image,
+  open,
+  onClose,
+}) => {
   const [file, setFile] = useState(null);
   const dispatch = useDispatch();
   const AddItems = useSelector((state) => state.AddItems);
+  const user = useUser();
+
+  useEffect(() => {
+    dispatch(setField({ name: "price", value: price }));
+    dispatch(setField({ name: "itemName", value: itemName }));
+    dispatch(setField({ name: "description", value: description }));
+    dispatch(setCheckbox({ name: "isVegetarian", checked: isVegetarian }));
+    setFile(image);
+  }, []);
 
   const handleIsVegetarian = () => {
-    dispatch(setCheckbox({ name: 'isVegetarian', checked: !AddItems.isVegetarian }));
+    dispatch(
+      setCheckbox({ name: "isVegetarian", checked: !AddItems.isVegetarian })
+    );
   };
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
+    console.log(value);
     dispatch(setField({ name, value }));
   };
 
@@ -99,49 +119,72 @@ const EditItem = ({itemId, open, onClose }) => {
   const handleUpdateItem = async () => {
     const { itemName, price, description, isVegetarian, itemImage } = AddItems;
 
-
     if (!itemName) {
-      dispatch(setError({ name: 'itemName', error: 'Item name cannot be empty' }));
+      dispatch(
+        setError({ name: "itemName", error: "Item name cannot be empty" })
+      );
       return;
     }
 
-    if (isNaN(price) || price === '') {
-      dispatch(setError({ name: 'price', error: 'Price must be a valid number' }));
+    if (isNaN(price) || price === "") {
+      dispatch(
+        setError({ name: "price", error: "Price must be a valid number" })
+      );
       return;
     }
-    if (file) {
-      const itemId = uniqid();
-      const storage = getStorage(app)
+    let url=file;
+    if (file && file != image) {
+      const storage = getStorage(app);
       const storageRef = ref(storage, `itemImages/${itemId}.jpg`);
-
       const metadata = {
-        contentType: 'image/jpeg',
+        contentType: "image/jpeg",
       };
+      dispatch(setLoading(true));
 
-      try {
-        dispatch(setLoading(true));
-
-        const snapshot = await uploadBytes(storageRef, file, metadata);
-        console.log('File uploaded successfully');
-
-        const url = await getDownloadURL(storageRef);
-        console.log('File download URL:', url);
-
-        dispatch(setLoading(false));
-        onClose();
-      } catch (error) {
-        console.error('Error:', error);
-      }
+      const snapshot = await uploadBytes(storageRef, file, metadata);
+      console.log("File uploaded successfully");
+      url = await getDownloadURL(storageRef);
+      console.log("File download URL:", url);
+    }
+    try {
+      await updateMenuItem({
+        restaurantId: user?.uid,
+        itemId: itemId,
+        itemName: itemName,
+        price: price,
+        description: description,
+        isVegetarian: isVegetarian,
+        itemImage: url,
+      });
+      dispatch(
+        updateItem({
+          restaurantId: user?.uid,
+          itemId: itemId,
+          itemName: itemName,
+          price: price,
+          description: description,
+          isVegetarian: isVegetarian,
+          itemImage: url,
+        })
+      );
+      dispatch(setLoading(false));
+      onClose();
+    } catch (error) {
+      console.error("Error:", error);
     }
 
     dispatch(clearForm());
   };
 
+  function closePopup() {
+    onClose();
+    dispatch(clearForm());
+  }
   return (
     <>
       <BlurredBackground open={open} />
       <PopupContainer open={open}>
-        <CloseButton variant="outlined" onClick={onClose}>
+        <CloseButton variant="outlined" onClick={() => closePopup()}>
           <CloseIcon />
         </CloseButton>
         <InputContainer>
@@ -186,7 +229,7 @@ const EditItem = ({itemId, open, onClose }) => {
         <RadioContainer>
           <RadioGroup
             row
-            value={!AddItems.isVegetarian ? 'vegetarian' : 'non-vegetarian'}
+            value={AddItems.isVegetarian ? "vegetarian" : "non-vegetarian"}
             onChange={() => handleIsVegetarian()}
           >
             <FormControlLabel
@@ -199,9 +242,9 @@ const EditItem = ({itemId, open, onClose }) => {
               control={
                 <Radio
                   sx={{
-                    color: '#e91212',
-                    '&.Mui-checked': {
-                      color: '#d30a2b',
+                    color: "#e91212",
+                    "&.Mui-checked": {
+                      color: "#d30a2b",
                     },
                   }}
                 />
@@ -211,13 +254,18 @@ const EditItem = ({itemId, open, onClose }) => {
           </RadioGroup>
         </RadioContainer>
         <UploadButton>
-          <Button style={{
-            marginTop: "10px",
-            backgroundColor: file ? "#f68621" : "#3939a3",
-            color:'white',
-            width: "100%",
-          }} variant="outlined" component="span"  startIcon={<CloudUploadIcon />}>
-            {file ?  "Image Uploaded" : "Upload Image" }
+          <Button
+            style={{
+              marginTop: "10px",
+              backgroundColor: file ? "#f68621" : "#3939a3",
+              color: "white",
+              width: "100%",
+            }}
+            variant="outlined"
+            component="span"
+            startIcon={<CloudUploadIcon />}
+          >
+            {file ? "Image Uploaded" : "Upload Image"}
           </Button>
           <input type="file" accept="image/*" onChange={handleImageUpload} />
         </UploadButton>
@@ -225,7 +273,9 @@ const EditItem = ({itemId, open, onClose }) => {
           loading={AddItems.isLoading}
           loadingPosition="start"
           startIcon={<AddIcon />}
-          variant="outlined" color='success' onClick={handleUpdateItem}
+          variant="outlined"
+          color="success"
+          onClick={handleUpdateItem}
           style={{
             backgroundColor: "#f68621",
             border: "none",

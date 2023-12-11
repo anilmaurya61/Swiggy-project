@@ -15,7 +15,7 @@ const MenuItemWrapper = styled.div`
   padding: 16px;
   margin: 16px auto;
   width: 60%;
-  height: 10rem;
+  min-height: 10rem;
   transition: transform 0.3s ease-in-out;
   display: flex;
   justify-content: space-between;
@@ -93,8 +93,7 @@ const AddButton = styled.button`
 `;
 
 const MenuItem = ({ addBtn, restaurantId, itemId, itemName, price, description, itemImage, isVegetarian }) => {
-  console.log("AddBtn", addBtn)
-  const dispatch = useDispatch();
+const dispatch = useDispatch();
   const [isPopupOpen, setPopupOpen] = useState(false);
 
   const handleClosePopup = () => {
@@ -114,10 +113,9 @@ const MenuItem = ({ addBtn, restaurantId, itemId, itemName, price, description, 
       console.error("Error deleting item:", error);
     }
   }
-  
   return (
     <>
-      {isPopupOpen && <EditItem itemId={itemId}  open={isPopupOpen} onClose={handleClosePopup} />}
+      {isPopupOpen && <EditItem itemId={itemId} itemName={itemName} description={description} isVegetarian={isVegetarian} price={price} image={itemImage } open={isPopupOpen} onClose={handleClosePopup} />}
       <MenuItemWrapper>
         <LeftColumn>
           <VegetarianLabel isVegetarian={!isVegetarian} src={veg} alt="Vegetarian" />
@@ -126,7 +124,7 @@ const MenuItem = ({ addBtn, restaurantId, itemId, itemName, price, description, 
           <Description>{description}</Description>
         </LeftColumn>
         <RightColumn>
-          {addBtn && <Box>
+          { !addBtn && <Box>
             <IconButton onClick={handleDelete}><DeleteIcon /></IconButton>
             <IconButton onClick={handleEdit}><EditIcon /></IconButton>
           </Box>}

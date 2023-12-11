@@ -80,7 +80,8 @@ const AddItemsPopup = ({ open, onClose }) => {
   const [file, setFile] = useState(null);
   const dispatch = useDispatch();
   const AddItems = useSelector((state) => state.AddItems);
-
+  
+  
 
   const handleIsVegetarian = () => {
     dispatch(setCheckbox({ name: 'isVegetarian', checked: !AddItems.isVegetarian }));

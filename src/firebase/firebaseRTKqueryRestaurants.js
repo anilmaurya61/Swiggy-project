@@ -11,7 +11,6 @@ export const RestaurantsApi = createApi({
         try {
           const restaurantsSnapshot = await getDocs(collection(db, "restaurants"), { signal });
           const restaurantsData = restaurantsSnapshot.docs.map((doc) => doc.data());
-          console.log(restaurantsData);
           return { data: restaurantsData };
         } catch (error) {
           return { error };

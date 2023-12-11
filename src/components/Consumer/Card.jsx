@@ -16,11 +16,11 @@ const StyledCard = styled.div`
   curser:pointer;
 
   &:hover {
-    box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.7);
+    box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.7);
   }
 
   &:active {
-    box-shadow: inset 10px 10px 20px rgba(2, 0, 0, 0.7);
+    box-shadow: inset 0px 0px 4px rgba(2, 0, 0, 0.7);
   }
 `;
 
@@ -50,7 +50,7 @@ const Card = (params) => {
   const navigate = useNavigate();
   return (
     <>
-      <StyledCard className="card-container" onClick={()=> navigate(`/menu?name=${params?.name}&location=${params?.location}&cuisines=${params?.cuisines}`)}>
+      <StyledCard className="card-container" onClick={()=> navigate(`/menu?name=${params?.name}&location=${params?.location}&cuisines=${params?.cuisines}&id=${params?.id}`)}>
         <ImgContainer className="img-container">
           <Img src={params.image} alt="" />
         </ImgContainer>

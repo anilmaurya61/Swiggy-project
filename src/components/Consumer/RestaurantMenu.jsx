@@ -5,9 +5,8 @@ import DirectionsBikeIcon from "@mui/icons-material/DirectionsBike";
 import Checkbox from "@mui/material/Checkbox";
 import { useLocation } from 'react-router-dom';
 const Container1 = styled.div`
-  max-width: 800px;
-  min-height: 800px;
-  margin: 20px auto 0;
+  max-width: 62%;
+  margin: 16px auto;
 `;
 const WrapperTop = styled.div`
   height: 52px;
@@ -104,6 +103,7 @@ const RestaurantMenu = () => {
   const name= params.get("name");
   const cuisines = params.get("cuisines");
   const location = params.get("location");
+
   return (
     <div>
       <Container1>
@@ -126,14 +126,14 @@ const RestaurantMenu = () => {
           <RatingWrapper>
             <Rating>
               <StarIcon style={{ height: "19px" }} />
-              3.3
+              4.0
             </Rating>
             <RatingText>10k+ ratings</RatingText>
           </RatingWrapper>
         </FlexDiv>
         <BikeContainer>
           <DirectionsBikeIcon style={{ color: "#8b8d97", marginTop: "3px" }} />
-          <LightText>2.2km | 32rs delivery charge</LightText>
+          <LightText>2.2km | ₹40 delivery charge</LightText>
         </BikeContainer>
         <hr style={{ color: "lightgray", borderStyle: "dashed" }}></hr>
         <VegContainer>
