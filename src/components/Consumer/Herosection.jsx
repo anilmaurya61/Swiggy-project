@@ -8,7 +8,7 @@ const Hero = ({ openDrawer }) => {
         <div className="herosection">
             <div className="hero-subsec">
                 <div className="hsec1">
-                    <img className="logo" src={Logo} alt="swiggylogo" />
+                    <Link to='/'><img className="logo" src={Logo} alt="swiggylogo" /></Link>
                     <div className="button-sect">
                         <button onClick={openDrawer('right', true)} className='login-btn'>Login</button>
                         <button onClick={openDrawer('right', true)} className='sign-up-btn'>Sign up</button>
@@ -28,7 +28,7 @@ const Hero = ({ openDrawer }) => {
                             </div>
                         </div>
                         <Link to="/" style={{color:"inherit", textDecoration:"none"}}>
-                        <button className='find-food-btn' >Find Food</button>
+                            <button className='find-food-btn' >Find Food</button>
                         </Link>
                     </div>
                 </div>
