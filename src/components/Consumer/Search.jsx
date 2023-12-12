@@ -116,8 +116,7 @@ function Search() {
           <img style={{ cursor: "pointer" }} src={image4}></img>
           <img style={{ cursor: "pointer" }} src={image5}></img>
           <img style={{ cursor: "pointer" }} src={image6}></img>
-          {restaurants.length!=filteredRestaurants.length &&
-            filteredRestaurants &&
+          {filteredRestaurants && restaurants && restaurants.length!=filteredRestaurants.length &&
             filteredRestaurants.map((hotel) => (
               <div style={{margin:"50px 0"}}>
               <Card 
