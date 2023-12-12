@@ -11,7 +11,6 @@ import { useDispatch,useSelector } from "react-redux";
 const MenuItemWrapper = styled.div`
   border-top: 1px solid #ccc;
   padding: 1rem;
-  height: 10rem;
   transition: transform 0.3s ease-in-out;
   display: flex;
   justify-content: space-between;
@@ -41,8 +40,8 @@ const RightColumn = styled.div`
 `;
 
 const ItemImage = styled.img`
-  height: 100%;
-  width: 100%;
+  height: 150px;
+  width: 150px;
   border-radius: 4px;
 `;
 
@@ -70,9 +69,9 @@ const CountItem = styled.div`
   align-items: center;
   color: #45a049;
   border: 1px solid grey;
-  width: 3.5rem;
+  width: 70px;
   margin: -1rem 0 0 0;
-  height:3rem;
+  height:34px;
   border-radius: 4px;
   transition: background-color 0.3s ease;
 `;

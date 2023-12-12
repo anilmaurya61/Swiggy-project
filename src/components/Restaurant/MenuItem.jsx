@@ -50,13 +50,14 @@ const RightColumn = styled.div`
 `;
 
 const ItemImage = styled.img`
-  height: 100%;
-  width: 100%;
+  height: 150px;
+  width: 150px;
   border-radius: 4px;
 `;
 
 const ItemName = styled.h3`
   margin-top: 8px;
+
 `;
 
 const Price = styled.p`
@@ -104,13 +105,12 @@ const CountItem = styled.div`
   align-items: center;
   color: #45a049;
   border: 1px solid grey;
-  width: 4vw;
+  width: 70px;
   margin: -1rem 0 0 0;
+  height:34px;
   border-radius: 4px;
-  height: 2rem;
   transition: background-color 0.3s ease;
-`;
-
+`
 
 const MenuItem = ({ addBtn, restaurantId, itemId, itemName, price, description, itemImage, isVegetarian }) => {
 const dispatch = useDispatch();
