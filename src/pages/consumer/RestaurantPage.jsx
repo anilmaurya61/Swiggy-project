@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Header from "../../components/Consumer/Header";
 import RestaurantMenu from "../../components/Consumer/RestaurantMenu";
 import MenuItem from "../../components/Restaurant/MenuItem";
-
+import ItemCart from "../../components/Consumer/ItemCart";
 import { useGetMenuItemQuery } from "../../firebase/firebaseRTKquery";
 import { getFirestore } from "firebase/firestore";
 import { useLocation } from "react-router-dom";
@@ -14,7 +14,6 @@ function RestaurantPage() {
   const { data: menuItem, error, isLoading } = useGetMenuItemQuery(id);
 
   const items = menuItem?.items;
-  console.log(items);
   return (
     <>
       <Header />
@@ -25,6 +24,7 @@ function RestaurantPage() {
             <MenuItem {...item} addBtn={true} key={index} />
           ))}
       </Box>
+      <ItemCart/>
     </>
   );
 }

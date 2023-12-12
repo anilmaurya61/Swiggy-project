@@ -10,6 +10,8 @@ import {
   Search as SearchIcon,
   ShoppingCart as ShoppingCartIcon
 } from '@mui/icons-material';
+import { useSelector } from "react-redux";
+
 
 const StyledNav = styled.nav`
   background-color: #fff;
@@ -52,7 +54,8 @@ const Search = styled.div`
   align-items: center;
 `
 const HeaderComponent = ({ prop }) => {
-
+ 
+  const cart = useSelector((state) => state.cart);
   const StyledBadge = Styled(Badge)(({ theme }) => ({
     '& .MuiBadge-badge': {
       right: -3,
@@ -69,7 +72,6 @@ const HeaderComponent = ({ prop }) => {
     Logout();
     navigate('/')
   }
-  console.log(prop);
 
   return (
     <StyledNav>
@@ -87,7 +89,7 @@ const HeaderComponent = ({ prop }) => {
           </li>
           <li>
             <IconButton aria-label="cart">
-              <StyledBadge badgeContent={1} color="secondary">
+              <StyledBadge badgeContent={cart.items&&cart.items.length} color="secondary">
                 <ShoppingCartIcon />
               </StyledBadge>
             </IconButton>

@@ -3,7 +3,7 @@ import { AddItemsReducer, ordersReducer } from '../feature/restaurant/Restaurant
 import { menuItemsApi } from '../firebase/firebaseRTKquery';
 import restaurantDetailsReducer from '../feature/restaurant/RestaurantDetailsSlice';
 import { RestaurantsApi } from '../firebase/firebaseRTKqueryRestaurants';
-
+import cartReducer  from '../feature/consumer/CartSlice'
 export const store = configureStore({
   reducer: {
     AddItems: AddItemsReducer,
@@ -11,6 +11,7 @@ export const store = configureStore({
     restaurantDetails: restaurantDetailsReducer,
     [menuItemsApi.reducerPath]: menuItemsApi.reducer,
     [RestaurantsApi.reducerPath]: RestaurantsApi.reducer,
+    cart: cartReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(menuItemsApi.middleware, RestaurantsApi.middleware), 

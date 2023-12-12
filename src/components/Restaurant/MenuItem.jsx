@@ -1,14 +1,17 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
-import veg from '../../assets/veg-icon.png';
-import { Delete as DeleteIcon, Edit as EditIcon } from '@mui/icons-material';
-import { Box, IconButton } from '@mui/material';
-import { deleteMenuItem } from '../../firebase/firestoreServices'
-import { deleteItem } from '../../feature/restaurant/RestaurantHomeSlice'
-import { useDispatch } from 'react-redux';
-import EditItem from './EditItem';
-
-
+import React, { useState } from "react";
+import styled from "styled-components";
+import veg from "../../assets/veg-icon.png";
+import { Delete as DeleteIcon, Edit as EditIcon } from "@mui/icons-material";
+import { Box, IconButton } from "@mui/material";
+import { deleteMenuItem } from "../../firebase/firestoreServices";
+import { deleteItem } from "../../feature/restaurant/RestaurantHomeSlice";
+import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
+import EditItem from "./EditItem";
+import {
+  addItemToCart,
+  removeItemFromCart,
+} from "../../feature/consumer/CartSlice";
 
 const MenuItemWrapper = styled.div`
   border-top: 1px solid #ccc;
@@ -33,7 +36,7 @@ const LeftColumn = styled.div`
   gap: 0.5rem;
   align-items: start;
   text-align: left;
-  padding-right: 16px; 
+  padding-right: 16px;
 `;
 
 const RightColumn = styled.div`
@@ -43,7 +46,6 @@ const RightColumn = styled.div`
   align-items: center;
   justify-content: center;
 `;
-
 
 const ItemImage = styled.img`
   height: 100%;
@@ -68,11 +70,13 @@ const VegetarianLabel = styled.img`
   margin-top: 8px;
   width: 20px;
   height: auto;
-  filter: ${(props) => (props.isVegetarian ? 'none' : 'hue-rotate(120deg)')};
+  filter: ${(props) => (props.isVegetarian ? "none" : "hue-rotate(120deg)")};
 `;
 
 const AddButton = styled.button`
   background-color: #fff;
+  display: flex;
+  justify-content: space-evenly;
   color: #45a049;
   margin: -1rem 0 0 0;
   padding: 0.5rem 1.5rem;
@@ -82,19 +86,61 @@ const AddButton = styled.button`
   transition: background-color 0.3s ease;
 
   &:hover {
-    background-color: #45a049; 
+    background-color: #45a049;
     color: #fff;
   }
 
   &:active {
-    background-color: #39843e; 
+    background-color: #39843e;
     color: #fff;
   }
 `;
+const CountItem = styled.div`
+  background-color: #fff;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  color: #45a049;
+  border: 1px solid grey;
+  width: 6vw;
+  margin: -1rem 0 0 0;
+  border-radius: 4px;
+  height: 1.8rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+`;
 
-const MenuItem = ({ addBtn, restaurantId, itemId, itemName, price, description, itemImage, isVegetarian }) => {
+
+const MenuItem = ({
+  addBtn,
+  restaurantId,
+  itemId,
+  itemName,
+  price,
+  description,
+  itemImage,
+  isVegetarian,
+}) => {
   const dispatch = useDispatch();
   const [isPopupOpen, setPopupOpen] = useState(false);
+  const cart = useSelector((state) => state.cart);
+  const handleAddToCart = () => {
+    const newItem = {
+      itemId,
+      itemName,
+      price,
+      description,
+      itemImage,
+      isVegetarian,
+    };
+    dispatch(addItemToCart(newItem));
+  };
+  const handleRemoveFromCart = () => {
+    dispatch(removeItemFromCart(itemId));
+  };
+
+  const foundItem = cart.items.find((item) => item.itemId === itemId);
+  console.log(foundItem);
 
   const handleClosePopup = () => {
     setPopupOpen(false);
@@ -102,34 +148,68 @@ const MenuItem = ({ addBtn, restaurantId, itemId, itemName, price, description, 
 
   const handleEdit = async () => {
     setPopupOpen(true);
-  }
+  };
 
   const handleDelete = async () => {
-    console.log(restaurantId, itemId);
     try {
-      dispatch(deleteItem(itemId))
+      dispatch(deleteItem(itemId));
       await deleteMenuItem(restaurantId, itemId);
     } catch (error) {
       console.error("Error deleting item:", error);
     }
-  }
+  };
   return (
     <>
-      {isPopupOpen && <EditItem itemId={itemId} itemName={itemName} description={description} isVegetarian={isVegetarian} price={price} image={itemImage } open={isPopupOpen} onClose={handleClosePopup} />}
+      {isPopupOpen && (
+        <EditItem
+          itemId={itemId}
+          itemName={itemName}
+          description={description}
+          isVegetarian={isVegetarian}
+          price={price}
+          image={itemImage}
+          open={isPopupOpen}
+          onClose={handleClosePopup}
+        />
+      )}
       <MenuItemWrapper>
         <LeftColumn>
-          <VegetarianLabel isVegetarian={!isVegetarian} src={veg} alt="Vegetarian" />
+          <VegetarianLabel
+            isVegetarian={!isVegetarian}
+            src={veg}
+            alt="Vegetarian"
+          />
           <ItemName>{itemName}</ItemName>
           <Price>₹{price}</Price>
           <Description>{description}</Description>
         </LeftColumn>
         <RightColumn>
-          { !addBtn && <Box>
-            <IconButton onClick={handleDelete}><DeleteIcon /></IconButton>
-            <IconButton onClick={handleEdit}><EditIcon /></IconButton>
-          </Box>}
+          {!addBtn && (
+            <Box>
+              <IconButton onClick={handleDelete}>
+                <DeleteIcon />
+              </IconButton>
+              <IconButton onClick={handleEdit}>
+                <EditIcon />
+              </IconButton>
+            </Box>
+          )}
           <ItemImage src={itemImage} alt={itemName} />
-          {addBtn && <AddButton>ADD</AddButton>}
+          {addBtn && !foundItem && (
+            <AddButton onClick={handleAddToCart}>ADD</AddButton>
+          )}
+          {foundItem&&foundItem.count>0 && (
+            <CountItem>
+              <div style={{ cursor: "pointer" }} onClick={handleRemoveFromCart}>
+                -
+              </div>
+              <div>{foundItem.count}</div>
+              <div style={{ cursor: "pointer" }} onClick={handleAddToCart}>
+                +
+              </div>
+            </CountItem>
+          )}
+        
         </RightColumn>
       </MenuItemWrapper>
     </>
