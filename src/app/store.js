@@ -1,7 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { persistStore, persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage'; 
-
 import { combineReducers } from 'redux'; 
 import { AddItemsReducer, ordersReducer } from '../feature/restaurant/RestaurantHomeSlice';
 import { menuItemsApi } from '../firebase/firebaseRTKquery';
@@ -9,6 +8,7 @@ import restaurantDetailsReducer from '../feature/restaurant/RestaurantDetailsSli
 import { RestaurantsApi } from '../firebase/firebaseRTKqueryRestaurants';
 import cartReducer from '../feature/consumer/CartSlice';
 import { addressesApi  } from '../firebase/getAddressRTKquery';
+
 
 const persistConfig = {
   key: 'root',
