@@ -93,7 +93,8 @@ export default function VerticalLinearStepper({ openDrawer }) {
 	const { Width, Height } = useWindowSize()
 	const user = useUser();
 	const { data, error, isLoading } = useGetAddressesQuery(user?.uid);
-
+    
+	console.log(data);
 	const handleNext = () => {
 		setActiveStep((prevActiveStep) => prevActiveStep + 1);
 	};
