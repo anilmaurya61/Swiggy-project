@@ -8,6 +8,8 @@ import { deleteItem } from "../../feature/restaurant/RestaurantHomeSlice";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import EditItem from "./EditItem";
+import AddIcon from '@mui/icons-material/Add';
+import RemoveIcon from '@mui/icons-material/Remove';
 import {
   addItemToCart,
   removeItemFromCart,
@@ -102,11 +104,10 @@ const CountItem = styled.div`
   align-items: center;
   color: #45a049;
   border: 1px solid grey;
-  width: 6vw;
+  width: 4vw;
   margin: -1rem 0 0 0;
   border-radius: 4px;
-  height: 1.8rem;
-  cursor: pointer;
+  height: 2rem;
   transition: background-color 0.3s ease;
 `;
 
@@ -129,9 +130,12 @@ const dispatch = useDispatch();
   const handleRemoveFromCart = () => {
     dispatch(removeItemFromCart(itemId));
   };
-
+  
   const foundItem = cart.items.find((item) => item.itemId === itemId);
   console.log(foundItem);
+  let totalCount=0;
+  if(cart!=undefined)
+    totalCount = cart.items.reduce((sum, item) => sum + item.count, 0);
 
   const handleClosePopup = () => {
     setPopupOpen(false);
@@ -191,13 +195,13 @@ const dispatch = useDispatch();
           )}
           {foundItem&&foundItem.count>0 && (
             <CountItem>
-              <div style={{ cursor: "pointer" }} onClick={handleRemoveFromCart}>
+              <RemoveIcon style={{ cursor: "pointer",height:"18px",width:"18px" }} onClick={handleRemoveFromCart}>
                 -
-              </div>
+              </RemoveIcon>
               <div>{foundItem.count}</div>
-              <div style={{ cursor: "pointer" }} onClick={handleAddToCart}>
+              <AddIcon style={{cursor: "pointer" ,height:"18px",width:"18px"}} onClick={handleAddToCart}>
                 +
-              </div>
+              </AddIcon>
             </CountItem>
           )}
         
