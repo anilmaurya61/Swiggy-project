@@ -115,7 +115,7 @@ export default function VerticalLinearStepper({ openDrawer }) {
 	};
 
 	return (
-		<Box sx={{ marginTop: '5rem', Width: '200px', marginLeft: '10rem', backgroundColor: '#fff' }}>
+		<Box sx={{ marginTop: '5rem', marginLeft: '10rem', backgroundColor: '#fff' }}>
 			<Stepper activeStep={activeStep} orientation="vertical">
 				{steps.map((step, index) => (
 					<Step key={step.label}>
@@ -141,7 +141,7 @@ export default function VerticalLinearStepper({ openDrawer }) {
 														<CheckCircleRoundedIcon style={{ color: 'green' }} />
 													</Online>
 													<Info>{user?.displayName} | {user?.email}</Info>
-													<Button onClick={handleNext} variant='outlined'>Continue</Button>
+													<Button sx={{marginTop:'1rem'}} onClick={handleNext} variant='outlined'>Continue</Button>
 												</StyledLoginContent>
 											) : (
 												<Box sx={{ display: 'flex', alignItems: 'center', gap: '2rem' }}>
@@ -163,15 +163,18 @@ export default function VerticalLinearStepper({ openDrawer }) {
 											{isLoading ? (
 												<h1>Loading</h1>
 											) : (
-												addressData.length == 0 ?
-													(<Button
-														onClick={openDrawer('right', true)}
-														variant='outlined'
-														color="success"
-													>
-														ADD NEW
-													</Button>
-													)
+												addressData?.length == 0 ?
+													(
+														<>
+															<Button
+																onClick={openDrawer('right', true)}
+																variant='outlined'
+																color="success"
+															>
+																ADD NEW
+															</Button>
+															<Button onClick={handleNext} variant='outlined'>Continue</Button>
+														</>)
 													:
 													(<Box sx={{ display: 'flex', alignItems: 'baseline', gap: '2rem' }}>
 														{addressData?.addressType === 'home' && <Box sx={{ width: '3rem' }}><HomeIcon /></Box>}

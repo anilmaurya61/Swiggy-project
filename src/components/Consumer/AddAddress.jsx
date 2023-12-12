@@ -10,6 +10,7 @@ import {Home as HomeIcon,
 } from '@mui/icons-material';
 import { useUser } from '../../context/authContext';
 import { addAddress } from '../../firebase/firestoreServices'
+import { LoadingButton } from '@mui/lab';
 
 const Wrapper = styled.div`
   margin-top: 5rem;
@@ -25,7 +26,7 @@ const Container = styled.div`
   width: 30rem;
 `;
 
-const AddAddress = () => {
+const AddAddress = ({ onClose }) => {
     const auth = getAuth(app);
     const navigate = useNavigate();
     const user = useUser();
@@ -36,6 +37,7 @@ const AddAddress = () => {
     const [addressError, setaddressError] = useState(false);
     const [flatError, setFlatError] = useState(false);
     const [landmarkError, setLandmarkError] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     const handleAddressChange = (event) => {
         setAddress(event.target.value);
@@ -66,8 +68,9 @@ const AddAddress = () => {
             return;
         }       
         try {
-            
+            setLoading(true);
             await addAddress({'userId':user.uid, address, doorFlatNo, landmark, addressType})
+            setLoading(false)
         } catch (error) {
             console.log(error.message)
         }
@@ -151,13 +154,15 @@ const AddAddress = () => {
                             </Box>
                         </Grid>
                     </Grid>
-                    <Button
+                    <LoadingButton
+                         disabled={loading}
+                         loading={loading}
                         variant="contained"
                         sx={{ color: 'fff', backgroundColor: '#f68621', borderRadius: '0px', width: '100%', height: '4rem', fontSize: '1.5rem', fontWeight: '800', margin: '2rem 0' }}
                         onClick={handleSaveAddress}
                     >
                         Save Address & proceed
-                    </Button>
+                    </LoadingButton>
                 </Container>
             </Wrapper>
         </>
@@ -167,7 +172,7 @@ const AddAddress = () => {
 const DrawerComponent = ({ anchor, isOpen, onClose, onOpen }) => {
     return (
         <SwipeableDrawer anchor={anchor} open={isOpen} onClose={onClose} onOpen={onOpen}>
-            <AddAddress />
+            <AddAddress  onClose ={ onClose }/>
         </SwipeableDrawer>
     );
 };
