@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
-import veg from '../../assets/veg-icon.png';
-import { Box, IconButton } from '@mui/material';
-import { useDispatch } from 'react-redux';
-
-
-
+import React, { useState } from "react";
+import styled from "styled-components";
+import veg from "../../assets/veg-icon.png";
+import AddIcon from '@mui/icons-material/Add';
+import RemoveIcon from '@mui/icons-material/Remove';
+import {
+  addItemToCart,
+  removeItemFromCart,
+} from "../../feature/consumer/CartSlice";
+import { useDispatch,useSelector } from "react-redux";
 const MenuItemWrapper = styled.div`
   border-top: 1px solid #ccc;
   padding: 1rem;
@@ -13,7 +15,7 @@ const MenuItemWrapper = styled.div`
   transition: transform 0.3s ease-in-out;
   display: flex;
   justify-content: space-between;
-    box-sizing: border-box;
+  box-sizing: border-box;
   &:hover {
     transform: scale(1.05);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -27,7 +29,7 @@ const LeftColumn = styled.div`
   gap: 0.5rem;
   align-items: start;
   text-align: left;
-  padding-right: 16px; 
+  padding-right: 16px;
 `;
 
 const RightColumn = styled.div`
@@ -37,7 +39,6 @@ const RightColumn = styled.div`
   align-items: center;
   justify-content: center;
 `;
-
 
 const ItemImage = styled.img`
   height: 100%;
@@ -58,50 +59,85 @@ const VegetarianLabel = styled.img`
   margin-top: 8px;
   width: 15px;
   height: auto;
-  filter: ${(props) => (props.isVegetarian ? 'none' : 'hue-rotate(120deg)')};
+  filter: ${(props) => (props.isVegetarian ? "none" : "hue-rotate(120deg)")};
 `;
 
-const AddButton = styled.button`
+
+const CountItem = styled.div`
   background-color: #fff;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
   color: #45a049;
-  margin: -1rem 0 0 0;
-  padding: 0.5rem 1.5rem;
   border: 1px solid grey;
+  width: 3.5rem;
+  margin: -1rem 0 0 0;
+  height:3rem;
   border-radius: 4px;
-  cursor: pointer;
   transition: background-color 0.3s ease;
-
-  &:hover {
-    background-color: #45a049; 
-    color: #fff;
-  }
-
-  &:active {
-    background-color: #39843e; 
-    color: #fff;
-  }
 `;
 
-const ReviewCart = ({ restaurantId, itemId, itemName, price, description, itemImage, isVegetarian }) => {
+const ReviewCart = ({
+  restaurantId,
+  itemId,
+  itemName,
+  price,
+  description,
+  itemImage,
+  isVegetarian,
+}) => 
 
-    const dispatch = useDispatch();
-
-
-    return (
-        <>
-            <MenuItemWrapper style={{width:'40vw'}}>
-                <LeftColumn>
-                    <VegetarianLabel isVegetarian={!isVegetarian} src={veg} alt="Vegetarian" />
-                    <ItemName>{itemName}</ItemName>
-                    <Price>₹{price}</Price>
-                </LeftColumn>
-                <RightColumn>
-                    <ItemImage src={itemImage} alt={itemName} />
-                    <AddButton>Remove</AddButton>
-                </RightColumn>
-            </MenuItemWrapper>
-        </>
-    );
+{
+  const dispatch = useDispatch();
+  const cart = useSelector((state) => state.cart);
+  const foundItem = cart.items.find((item) => item.itemId === itemId);
+  const handleAddToCart = () => {
+    const newItem = {
+      itemId,
+      itemName,
+      price,
+      description,
+      itemImage,
+      isVegetarian,
+    };
+    dispatch(addItemToCart(newItem));
+  };
+  const handleRemoveFromCart = () => {
+    dispatch(removeItemFromCart(itemId));
+  };
+  return (
+    <>
+      <MenuItemWrapper style={{ width: "40vw" }}>
+        <LeftColumn>
+          <VegetarianLabel
+            isVegetarian={!isVegetarian}
+            src={veg}
+            alt="Vegetarian"
+          />
+          <ItemName>{itemName}</ItemName>
+          <Price>₹{price}</Price>
+        </LeftColumn>
+        <RightColumn>
+          <ItemImage src={itemImage} alt={itemName} />
+          <CountItem >
+            <RemoveIcon
+              style={{ cursor: "pointer", height: "18px", width: "18px" }}
+              onClick={handleRemoveFromCart}
+            >
+              -
+            </RemoveIcon>
+            <div>{foundItem.count}</div>
+            <AddIcon
+              style={{ cursor: "pointer", height: "18px", width: "18px" }}
+              onClick={handleAddToCart}
+            >
+              +
+            </AddIcon>
+          </CountItem>
+        </RightColumn>
+      </MenuItemWrapper>
+    </>
+  );
 };
 
 export default ReviewCart;
