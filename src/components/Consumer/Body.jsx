@@ -17,30 +17,6 @@ const RestaurantContainer = styled.div`
   padding: 0 3rem 0 3rem;
 `;
 
-const SearchContainer = styled.span`
-  input {
-    height: 3rem;
-    width: 20rem;
-    border: 2px solid grey;
-    border-radius: 20px;
-    padding: 0.5rem;
-    font-size: 1.5rem;
-  }
-`;
-
-const Button = styled.button`
-  border: 1px solid grey;
-  border-radius: 20px;
-  padding: 10px;
-  background-color: #fff;
-  margin: 2rem 1rem 0 1rem;
-  font-size: 1.5rem;
-  color: grey;
-
-  &:active {
-    box-shadow: inset 2px 2px 5px 2px rgba(0, 0, 0, 0.5);
-  }
-`;
 
 const FoodCardsContainer = styled.div`
   width: 100%;
@@ -54,6 +30,7 @@ const FoodCardsContainer = styled.div`
 
 const Body = () => {
   const { data: restaurants, error, isLoading } = useGetAllRestaurantsQuery();
+
   return (
     <Container>
       <RestaurantContainer>

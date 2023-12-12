@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import veg from "../../assets/veg-icon.png";
+import nonVeg from "../../assets/non-veg.png";
 import { Delete as DeleteIcon, Edit as EditIcon } from "@mui/icons-material";
 import { Box, IconButton } from "@mui/material";
 import { deleteMenuItem } from "../../firebase/firestoreServices";
@@ -8,12 +9,13 @@ import { deleteItem } from "../../feature/restaurant/RestaurantHomeSlice";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import EditItem from "./EditItem";
-import AddIcon from '@mui/icons-material/Add';
-import RemoveIcon from '@mui/icons-material/Remove';
+import AddIcon from "@mui/icons-material/Add";
+import RemoveIcon from "@mui/icons-material/Remove";
 import {
   addItemToCart,
   removeItemFromCart,
 } from "../../feature/consumer/CartSlice";
+import Alert from "@mui/material/Alert";
 
 const MenuItemWrapper = styled.div`
   border-top: 1px solid #ccc;
@@ -72,7 +74,6 @@ const VegetarianLabel = styled.img`
   margin-top: 8px;
   width: 20px;
   height: auto;
-  filter: ${(props) => (props.isVegetarian ? "none" : "hue-rotate(120deg)")};
 `;
 
 const AddButton = styled.button`
@@ -111,11 +112,21 @@ const CountItem = styled.div`
   transition: background-color 0.3s ease;
 `;
 
-
-const MenuItem = ({ addBtn, restaurantId, itemId, itemName, price, description, itemImage, isVegetarian }) => {
-const dispatch = useDispatch();
+const MenuItem = ({
+  addBtn,
+  restaurantId,
+  itemId,
+  itemName,
+  price,
+  description,
+  itemImage,
+  isVegetarian,
+}) => {
+  const dispatch = useDispatch();
   const [isPopupOpen, setPopupOpen] = useState(false);
+  const [isDeleted, setIsDeleted] = useState(false);
   const cart = useSelector((state) => state.cart);
+
   const handleAddToCart = () => {
     const newItem = {
       itemId,
@@ -130,11 +141,11 @@ const dispatch = useDispatch();
   const handleRemoveFromCart = () => {
     dispatch(removeItemFromCart(itemId));
   };
-  
+
   const foundItem = cart.items.find((item) => item.itemId === itemId);
   console.log(foundItem);
-  let totalCount=0;
-  if(cart!=undefined)
+  let totalCount = 0;
+  if (cart != undefined)
     totalCount = cart.items.reduce((sum, item) => sum + item.count, 0);
 
   const handleClosePopup = () => {
@@ -145,16 +156,38 @@ const dispatch = useDispatch();
     setPopupOpen(true);
   };
 
+
   const handleDelete = async () => {
     try {
       dispatch(deleteItem(itemId));
       await deleteMenuItem(restaurantId, itemId);
+      setIsDeleted(true);
+
+      setTimeout(() => {
+        setIsDeleted(false);
+      }, 2000);
     } catch (error) {
       console.error("Error deleting item:", error);
     }
   };
+  console.log(isDeleted);
   return (
     <>
+     {isDeleted && (
+        <Alert
+          style={{
+            position: "absolute",
+            bottom: "1%",
+            left: "26%",
+            width: "46%",
+            backgroundColor: "lightblue",
+            zIndex: 9999, 
+          }}
+          severity="success"
+        >
+          Item Deleted Successfully
+        </Alert>
+      )}
       {isPopupOpen && (
         <EditItem
           itemId={itemId}
@@ -170,8 +203,8 @@ const dispatch = useDispatch();
       <MenuItemWrapper>
         <LeftColumn>
           <VegetarianLabel
-            isVegetarian={!isVegetarian}
-            src={veg}
+            isVegetarian={isVegetarian}
+            src={isVegetarian?veg:nonVeg}
             alt="Vegetarian"
           />
           <ItemName>{itemName}</ItemName>
@@ -193,18 +226,23 @@ const dispatch = useDispatch();
           {addBtn && !foundItem && (
             <AddButton onClick={handleAddToCart}>ADD</AddButton>
           )}
-          {foundItem&&foundItem.count>0 && (
+          {foundItem && foundItem.count > 0 && (
             <CountItem>
-              <RemoveIcon style={{ cursor: "pointer",height:"18px",width:"18px" }} onClick={handleRemoveFromCart}>
+              <RemoveIcon
+                style={{ cursor: "pointer", height: "18px", width: "18px" }}
+                onClick={handleRemoveFromCart}
+              >
                 -
               </RemoveIcon>
               <div>{foundItem.count}</div>
-              <AddIcon style={{cursor: "pointer" ,height:"18px",width:"18px"}} onClick={handleAddToCart}>
+              <AddIcon
+                style={{ cursor: "pointer", height: "18px", width: "18px" }}
+                onClick={handleAddToCart}
+              >
                 +
               </AddIcon>
             </CountItem>
           )}
-        
         </RightColumn>
       </MenuItemWrapper>
     </>
