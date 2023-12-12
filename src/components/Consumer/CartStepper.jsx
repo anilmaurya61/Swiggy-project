@@ -1,14 +1,13 @@
-import React, { useState } from 'react';
-import {Box, Stepper, Step, StepLabel, StepContent, Button, Typography} from '@mui/material';
-// import Stepper from '@mui/material/Stepper';
-// import Step from '@mui/material/Step';
-// import StepLabel from '@mui/material/StepLabel';
-// import StepContent from '@mui/material/StepContent';
-// import Button from '@mui/material/Button';
-// import Typography from '@mui/material/Typography';
-// import OnlinePredictionIcon from '@mui/icons-material/OnlinePrediction';
+import React, { useEffect, useState } from 'react';
+import { Box, Stepper, Step, StepLabel, StepContent, Button, Typography } from '@mui/material';
 import styled from 'styled-components';
-import {OnlinePrediction as OnlinePredictionIcon,Home as HomeIcon} from '@mui/icons-material';
+import {
+	OnlinePrediction as OnlinePredictionIcon,
+	Home as HomeIcon,
+    WorkOutline as WorkIcon,
+    LocationOnOutlined as OtherIcon, 
+	CheckCircleRounded as CheckCircleRoundedIcon
+} from '@mui/icons-material';
 import { useWindowSize } from 'react-use';
 import Confetti from 'react-confetti'
 import { Link } from 'react-router-dom';
@@ -47,18 +46,13 @@ const StyledGreenText = styled.h1`
  	font-size: 1.3rem;
     font-weight: 600;
     color: #282c3f;
-    margin-bottom: 32px;
-    display: -ms-flexbox;
-    display: flex;
-    -ms-flex-align: center;
-    align-items: center;
 `;
 
 const Online = styled.div`
     display: flex;
     align-items: center; 
-	align-content: center;
 	gap:1rem;
+	margin-bottom: 30px;
 `
 
 const Info = styled.p`
@@ -86,14 +80,20 @@ const popupStyle = {
 	boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.2)',
 };
 
-const steps = [{ label: 'Login' }, { label: 'Add Delivery Address' },{ label: 'Payment'	}];
+const steps = [{ label: 'Login' }, { label: 'Add Delivery Address' }, { label: 'Payment' }];
 
 export default function VerticalLinearStepper({ openDrawer }) {
 	const [activeStep, setActiveStep] = useState(0);
+	const [addressData, setaddressData] = useState([]);
 	const { Width, Height } = useWindowSize()
 	const user = useUser();
 	const { data, error, isLoading } = useGetAddressesQuery(user?.uid);
-
+	console.log(isLoading, data?.addresses[data?.addresses.length - 1])
+	useEffect(() => {
+		if (!isLoading) {
+			setaddressData(data?.addresses[0])
+		}
+	}, [data])
 	const handleNext = () => {
 		setActiveStep((prevActiveStep) => prevActiveStep + 1);
 	};
@@ -125,9 +125,9 @@ export default function VerticalLinearStepper({ openDrawer }) {
 											<StyledLoginContent>
 												<Online>
 													<StyledGreenText>LoggedIn</StyledGreenText>
-													<OnlinePredictionIcon />
+													<CheckCircleRoundedIcon style={{color:'green'}}/>
 												</Online>
-												<Info>Anil Maurya | anilmaurya0004@gmail.com</Info>
+												<Info>{user?.displayName} | {user?.email}</Info>
 											</StyledLoginContent>
 											<img src="https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_147,h_140/Image-login_btpq7r" alt="" />
 										</StyledLoginContainer>
@@ -141,10 +141,16 @@ export default function VerticalLinearStepper({ openDrawer }) {
 												</Online>
 											</StyledLoginContent>
 											<Box sx={{ display: 'flex', alignItems: 'baseline', gap: '2rem' }}>
-												<Box sx={{ width: '3rem' }}><HomeIcon /></Box>
+
+												{addressData?.addressType == 'home' && <Box sx={{ width: '3rem' }}><HomeIcon /></Box>}
+												{addressData?.addressType == 'work' && <Box sx={{ width: '3rem' }}><WorkIcon /></Box>}
+												{addressData?.addressType == 'other' && <Box sx={{ width: '3rem' }}><OtherIcon /></Box>}
 												<Box>
-													<h2>Home</h2>
-													<p>32, My Sugar Building 3rd Floor J C Street B-2, opposite to Ravindra Kalakshethra, Kumbarpet, Dodpete, Nagarathpete, ...</p>
+												{addressData?.addressType == 'home' && <Box sx={{ width: '3rem' }}><h2>Home</h2></Box>}
+												{addressData?.addressType == 'work' && <Box sx={{ width: '3rem' }}><h2>Work</h2></Box>}
+												{addressData?.addressType == 'other' && <Box sx={{ width: '3rem' }}><h2>Other</h2></Box>}
+												
+													<p>{addressData?.doorFlatNo + ', ' + addressData?.address + ', ' + addressData?.landmark}</p>
 													<Button onClick={openDrawer('right', true)} variant='outlined' color="success">ADD NEW</Button>
 												</Box>
 
