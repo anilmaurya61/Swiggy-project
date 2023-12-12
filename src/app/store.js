@@ -8,7 +8,7 @@ import restaurantDetailsReducer from '../feature/restaurant/RestaurantDetailsSli
 import { RestaurantsApi } from '../firebase/firebaseRTKqueryRestaurants';
 import cartReducer from '../feature/consumer/CartSlice';
 import { addressesApi  } from '../firebase/getAddressRTKquery';
-
+import showRemoveItemReducer from  '../feature/restaurant/DeleteItemSlice';
 
 const persistConfig = {
   key: 'root',
@@ -24,6 +24,7 @@ export const rootReducer = combineReducers({
   [RestaurantsApi.reducerPath]: RestaurantsApi.reducer,
   [addressesApi.reducerPath]: addressesApi.reducer,
   cart: cartReducer,
+  showRemoveItem:showRemoveItemReducer,
 });
 
 export const persistedReducer = persistReducer(persistConfig, rootReducer);

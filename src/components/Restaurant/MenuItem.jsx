@@ -6,6 +6,7 @@ import { Delete as DeleteIcon, Edit as EditIcon } from "@mui/icons-material";
 import { Box, IconButton } from "@mui/material";
 import { deleteMenuItem } from "../../firebase/firestoreServices";
 import { deleteItem } from "../../feature/restaurant/RestaurantHomeSlice";
+import { removeItem } from "../../feature/restaurant/DeleteItemSlice";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import EditItem from "./EditItem";
@@ -15,7 +16,7 @@ import {
   addItemToCart,
   removeItemFromCart,
 } from "../../feature/consumer/CartSlice";
-import Alert from "@mui/material/Alert";
+
 
 const MenuItemWrapper = styled.div`
   border-top: 1px solid #ccc;
@@ -124,9 +125,7 @@ const MenuItem = ({
 }) => {
   const dispatch = useDispatch();
   const [isPopupOpen, setPopupOpen] = useState(false);
-  const [isDeleted, setIsDeleted] = useState(false);
   const cart = useSelector((state) => state.cart);
-
   const handleAddToCart = () => {
     const newItem = {
       itemId,
@@ -155,40 +154,22 @@ const MenuItem = ({
   const handleEdit = async () => {
     setPopupOpen(true);
   };
-
+   
 
   const handleDelete = async () => {
     try {
       dispatch(deleteItem(itemId));
-      setIsDeleted(true);
-
-      setTimeout(() => {
-        setIsDeleted(false);
-      }, 2000);
+      dispatch(removeItem(true));
+      setTimeout(()=>{
+        dispatch(removeItem(false));
+      },2000)
       await deleteMenuItem(restaurantId, itemId);
-  
     } catch (error) {
       console.error("Error deleting item:", error);
     }
   };
-  console.log(isDeleted);
   return (
     <>
-     {isDeleted && (
-        <Alert
-          style={{
-            position: "absolute",
-            bottom: "1%",
-            left: "26%",
-            width: "46%",
-            backgroundColor: "lightblue",
-            zIndex: 9999, 
-          }}
-          severity="success"
-        >
-          Item Deleted Successfully
-        </Alert>
-      )}
       {isPopupOpen && (
         <EditItem
           itemId={itemId}
