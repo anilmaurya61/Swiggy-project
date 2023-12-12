@@ -71,10 +71,10 @@ const HeaderComponent = ({ prop }) => {
     navigate("/");
   }
 
-  let totalCount=0;
-  if(cart!=undefined)
+  let totalCount = 0;
+  if (cart != undefined)
     totalCount = cart.items.reduce((sum, item) => sum + item.count, 0);
-  
+
   return (
     <StyledNav>
       <StyledContainer className="container">
@@ -102,28 +102,33 @@ const HeaderComponent = ({ prop }) => {
           <li>
             <Link to="/cart">
               <IconButton aria-label="cart">
-                <StyledBadge
-                  badgeContent={totalCount}
-                  color="secondary"
-                >
+                <StyledBadge badgeContent={totalCount} color="secondary">
                   <ShoppingCartIcon />
                 </StyledBadge>
               </IconButton>
             </Link>
           </li>
-          <li>
-            {user && (
-              <div style={{ display: "flex", alignItems: "center" }}>
-                <Avatar alt="Travis Howard" src={user.photoURL} />
-                <StyledSpan>{user.displayName}</StyledSpan>
-              </div>
-            )}
-          </li>
-          <li>
+          {user ?(
+            <>
+              <li>
+                <div style={{ display: "flex", alignItems: "center" }}>
+                  <Avatar alt="Travis Howard" src={user.photoURL} />
+                  <StyledSpan>{user.displayName}</StyledSpan>
+                </div>
+              </li>
+              <li>
+                <Button variant="outlined" onClick={handleLogout}>
+                  Logout
+                </Button>
+              </li>
+            </>)
+            :(
+              <Link to="/auth">
             <Button variant="outlined" onClick={handleLogout}>
-              Logout
-            </Button>
-          </li>
+            Log in
+          </Button>
+          </Link>
+          )}
         </StyledUl>
       </StyledContainer>
     </StyledNav>

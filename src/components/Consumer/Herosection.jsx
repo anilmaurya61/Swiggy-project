@@ -2,7 +2,7 @@ import React from 'react';
 import GpsFixedIcon from '@mui/icons-material/GpsFixed';
 import Logo from '../../assets/Swiggy_logo.png';
 import '../../styles/hero.css';
-
+import { Link } from 'react-router-dom';
 const Hero = ({ openDrawer }) => {
     return (
         <div className="herosection">
@@ -27,7 +27,9 @@ const Hero = ({ openDrawer }) => {
                                 <span> &nbsp; &nbsp;Locate Me</span>
                             </div>
                         </div>
+                        <Link to="/" style={{color:"inherit", textDecoration:"none"}}>
                         <button className='find-food-btn' >Find Food</button>
+                        </Link>
                     </div>
                 </div>
                 <div className="hsec4">
