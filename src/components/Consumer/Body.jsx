@@ -4,6 +4,8 @@ import Card from './Card';
 import data from '../../data.json';
 import { useNavigate } from 'react-router-dom';
 import { useGetAllRestaurantsQuery} from '../../firebase/firebaseRTKqueryRestaurants'
+import CardSkeleton from './CardSkeleton';
+
 const Container = styled.div`
   box-sizing: border-box;
   width: 100%;
@@ -36,7 +38,9 @@ const Body = () => {
       <RestaurantContainer>
       <h1>Restaurants with online food delivery in Bangalore</h1>
         <FoodCardsContainer>
-          {restaurants&&restaurants.map((hotel) => (
+         
+          { isLoading ? <CardSkeleton/>
+          :restaurants&&restaurants.map((hotel) => (
             <Card
               key={hotel?.restaurant_id}
               image={hotel?.image_url}
