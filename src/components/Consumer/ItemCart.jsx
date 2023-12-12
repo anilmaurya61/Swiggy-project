@@ -1,6 +1,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
+import { Link } from "react-router-dom";
 const Cart = styled.button`
   height: 48px;
   background: #60b246;
@@ -37,16 +38,19 @@ const Span3 = styled.div`
 `;
 function ItemCart() {
   const cart = useSelector((state) => state.cart);
-  let totalCount=0;
-  if(cart!=undefined)
+
+  let totalCount = 0;
+  if (cart != undefined)
     totalCount = cart.items.reduce((sum, item) => sum + item.count, 0);
   return (
     <>
       {cart?.items?.length > 0 ? (
-        <Cart>
-          <Span1>{totalCount} item added</Span1>
-          <Span1>View Cart</Span1>
-        </Cart>
+        <Link to="/cart" style={{ textDecoration: "none", color: "inherit" }}>
+          <Cart>
+            <Span1>{cart.items && cart.items.length} item added</Span1>
+            <Span1>View Cart</Span1>
+          </Cart>
+        </Link>
       ) : (
         <></>
       )}
