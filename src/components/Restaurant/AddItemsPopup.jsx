@@ -136,10 +136,9 @@ const AddItemsPopup = ({ open, onClose }) => {
         console.error('Error:', error);
       }
     }
-
     dispatch(clearForm());
   };
-
+  console.log(AddItems.isVegetarian);
   return (
     <>
       <BlurredBackground open={open} />
@@ -189,7 +188,7 @@ const AddItemsPopup = ({ open, onClose }) => {
         <RadioContainer>
           <RadioGroup
             row
-            value={!AddItems.isVegetarian ? 'vegetarian' : 'non-vegetarian'}
+            value={AddItems.isVegetarian ? 'vegetarian' : 'non-vegetarian'}
             onChange={() => handleIsVegetarian()}
           >
             <FormControlLabel

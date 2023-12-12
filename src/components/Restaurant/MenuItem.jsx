@@ -160,12 +160,13 @@ const MenuItem = ({
   const handleDelete = async () => {
     try {
       dispatch(deleteItem(itemId));
-      await deleteMenuItem(restaurantId, itemId);
       setIsDeleted(true);
 
       setTimeout(() => {
         setIsDeleted(false);
       }, 2000);
+      await deleteMenuItem(restaurantId, itemId);
+  
     } catch (error) {
       console.error("Error deleting item:", error);
     }
