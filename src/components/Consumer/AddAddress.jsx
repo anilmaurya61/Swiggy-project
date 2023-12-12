@@ -8,6 +8,7 @@ import HomeIcon from '@mui/icons-material/Home';
 import WorkOutlineIcon from '@mui/icons-material/WorkOutline';
 import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
 
+
 const Wrapper = styled.div`
   margin-top: 5rem;
   margin-left: 2rem;
@@ -44,22 +45,43 @@ const AddAddress = () => {
     const [address, setAddress] = useState('');
     const [doorFlatNo, setDoorFlatNo] = useState('');
     const [landmark, setLandmark] = useState('');
+    const [addressType, setAddressType] = useState('');
+    const [addressError, setaddressError] = useState(false);
+    const [flatError, setFlatError] = useState(false);
+    const [landmarkError, setLandmarkError] = useState(false);
 
     const handleAddressChange = (event) => {
         setAddress(event.target.value);
+        setaddressError(false);
     };
 
     const handleDoorFlatNoChange = (event) => {
         setDoorFlatNo(event.target.value);
+        setFlatError(false);
     };
 
     const handleLandmarkChange = (event) => {
         setLandmark(event.target.value);
+        setLandmarkError(false);
     };
 
     const handleSaveAddress = () => {
-        console.log(address, doorFlatNo, landmark)
+        if (address.trim() == '') {
+            setaddressError(true);
+            return;
+        }
+        if (doorFlatNo.trim() == '') {
+            setFlatError(true);
+            return;
+        }
+        if (landmark.trim() == '') {
+            setLandmarkError(true);
+            return;
+        }
+        console.log(address, doorFlatNo, landmark, addressType)
+
     }
+
     return (
         <>
             <Wrapper>
@@ -76,6 +98,7 @@ const AddAddress = () => {
                     </Map>
                     <Address>
                         <TextField
+                            error={addressError}
                             id="outlined-basic"
                             sx={{ width: '100%', marginTop: '1rem' }}
                             label="Enter Address ..."
@@ -84,6 +107,7 @@ const AddAddress = () => {
                             onChange={handleAddressChange}
                         />
                         <TextField
+                            error={flatError}
                             id="outlined-basic"
                             sx={{ width: '100%', marginTop: '1rem' }}
                             label="Door/Flat No."
@@ -92,6 +116,7 @@ const AddAddress = () => {
                             onChange={handleDoorFlatNoChange}
                         />
                         <TextField
+                            error={landmarkError}
                             id="outlined-basic"
                             sx={{ width: '100%', marginTop: '1rem' }}
                             label="Landmark"
@@ -101,7 +126,7 @@ const AddAddress = () => {
                         />
                     </Address>
                     <Grid container spacing={1} sx={{ marginTop: '1rem', marginLeft: 0, border: '1px solid gray', height: '60px', width: '100%' }}>
-                        <Grid item xs={4} sx={{
+                        <Grid onClick={() => setAddressType('home')} item xs={4} sx={{
                             borderRight: '1px solid grey', display: 'flex', alignItems: 'center', justifyContent: 'center', '&:hover': {
                                 background: 'black',
                                 color: 'white',
@@ -112,7 +137,7 @@ const AddAddress = () => {
                                 <span>Home</span>
                             </Box>
                         </Grid>
-                        <Grid item xs={4} sx={{
+                        <Grid onClick={() => setAddressType('work')} item xs={4} sx={{
                             borderRight: '1px solid grey', display: 'flex', alignItems: 'center', justifyContent: 'center', '&:hover': {
                                 background: 'black',
                                 color: 'white',
@@ -123,7 +148,7 @@ const AddAddress = () => {
                                 <span>Work</span>
                             </Box>
                         </Grid>
-                        <Grid item xs={4} sx={{
+                        <Grid onClick={() => setAddressType('other')} item xs={4} sx={{
                             display: 'flex', alignItems: 'center', justifyContent: 'center', '&:hover': {
                                 background: 'black',
                                 color: 'white',
