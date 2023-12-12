@@ -64,7 +64,6 @@ const Info = styled.p`
 `
 
 const AddAddress = styled.div`
-	width: 25rem;
 	border: 1px solid grey;
 	margin:1rem;
 	padding: 1rem;
