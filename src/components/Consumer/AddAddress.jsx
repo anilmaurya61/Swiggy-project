@@ -4,9 +4,10 @@ import styled from 'styled-components';
 import { getAuth } from 'firebase/auth';
 import { app } from '../../firebase/firebaseConfig'
 import { useNavigate } from 'react-router-dom';
-import HomeIcon from '@mui/icons-material/Home';
-import WorkOutlineIcon from '@mui/icons-material/WorkOutline';
-import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
+import {Home as HomeIcon,
+    WorkOutline as WorkOutlineIcon,
+    LocationOnOutlined as LocationOnOutlinedIcon 
+} from '@mui/icons-material';
 import { useUser } from '../../context/authContext';
 import { addAddress } from '../../firebase/firestoreServices'
 
