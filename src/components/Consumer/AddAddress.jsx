@@ -7,7 +7,8 @@ import { useNavigate } from 'react-router-dom';
 import HomeIcon from '@mui/icons-material/Home';
 import WorkOutlineIcon from '@mui/icons-material/WorkOutline';
 import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
-
+import { useUser } from '../../context/authContext';
+import { addAddress } from '../../firebase/firestoreServices'
 
 const Wrapper = styled.div`
   margin-top: 5rem;
@@ -23,25 +24,10 @@ const Container = styled.div`
   width: 30rem;
 `;
 
-const Map = styled.div`
-    
-`
-
-const Address = styled.div`
-    /* min-height: 20rem;
-    width: 30rem;
-    margin-top: 2rem;
-    border: 1px solid grey; */
-`
-
-const CustomTextField = styled(TextField)`
-
-`;
-
-
 const AddAddress = () => {
     const auth = getAuth(app);
     const navigate = useNavigate();
+    const user = useUser();
     const [address, setAddress] = useState('');
     const [doorFlatNo, setDoorFlatNo] = useState('');
     const [landmark, setLandmark] = useState('');
@@ -65,7 +51,7 @@ const AddAddress = () => {
         setLandmarkError(false);
     };
 
-    const handleSaveAddress = () => {
+    const handleSaveAddress = async() => {
         if (address.trim() == '') {
             setaddressError(true);
             return;
@@ -77,8 +63,12 @@ const AddAddress = () => {
         if (landmark.trim() == '') {
             setLandmarkError(true);
             return;
+        }       
+        try {
+            await addAddress({'userId':user.uid, address, doorFlatNo, landmark, addressType})
+        } catch (error) {
+            console.log(error.message)
         }
-        console.log(address, doorFlatNo, landmark, addressType)
 
     }
 
@@ -86,7 +76,7 @@ const AddAddress = () => {
         <>
             <Wrapper>
                 <Container>
-                    <Map><iframe
+                    <iframe
                         src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d62217.306746757495!2d77.5882263250899!3d12.934586771972885!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae151947c69de7%3A0xf2b320fefa7ffb8c!2sMountBlue%20Technologies%20Private%20Limited!5e0!3m2!1sen!2sin!4v1702287935689!5m2!1sen!2sin"
                         width={480}
                         height={350}
@@ -95,8 +85,7 @@ const AddAddress = () => {
                         loading="lazy"
                         referrerPolicy="no-referrer-when-downgrade"
                     />
-                    </Map>
-                    <Address>
+                    <Box>
                         <TextField
                             error={addressError}
                             id="outlined-basic"
@@ -124,7 +113,7 @@ const AddAddress = () => {
                             value={landmark}
                             onChange={handleLandmarkChange}
                         />
-                    </Address>
+                    </Box>
                     <Grid container spacing={1} sx={{ marginTop: '1rem', marginLeft: 0, border: '1px solid gray', height: '60px', width: '100%' }}>
                         <Grid onClick={() => setAddressType('home')} item xs={4} sx={{
                             borderRight: '1px solid grey', display: 'flex', alignItems: 'center', justifyContent: 'center', '&:hover': {

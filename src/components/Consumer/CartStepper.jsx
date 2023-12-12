@@ -1,21 +1,20 @@
 import React, { useState } from 'react';
-import Box from '@mui/material/Box';
-import Stepper from '@mui/material/Stepper';
-import Step from '@mui/material/Step';
-import StepLabel from '@mui/material/StepLabel';
-import StepContent from '@mui/material/StepContent';
-import Button from '@mui/material/Button';
-import Paper from '@mui/material/Paper';
-import Typography from '@mui/material/Typography';
-import OnlinePredictionIcon from '@mui/icons-material/OnlinePrediction';
+import {Box, Stepper, Step, StepLabel, StepContent, Button, Typography} from '@mui/material';
+// import Stepper from '@mui/material/Stepper';
+// import Step from '@mui/material/Step';
+// import StepLabel from '@mui/material/StepLabel';
+// import StepContent from '@mui/material/StepContent';
+// import Button from '@mui/material/Button';
+// import Typography from '@mui/material/Typography';
+// import OnlinePredictionIcon from '@mui/icons-material/OnlinePrediction';
 import styled from 'styled-components';
-import HomeIcon from '@mui/icons-material/Home';
+import {OnlinePrediction as OnlinePredictionIcon,Home as HomeIcon} from '@mui/icons-material';
 import { useWindowSize } from 'react-use';
 import Confetti from 'react-confetti'
 import { Link } from 'react-router-dom';
 import confirmOrder from '../../assets/orderConfirmed.gif'
-
-
+import { useUser } from '../../context/authContext';
+import { useGetAddressesQuery } from '../../firebase/getAddressRTKquery'
 
 const StyledLoginContainer = styled(Box)`
   height: 10rem;
@@ -87,21 +86,13 @@ const popupStyle = {
 	boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.2)',
 };
 
-const steps = [
-	{
-		label: 'Login',
-	},
-	{
-		label: 'Add Delivery Address',
-	},
-	{
-		label: 'Payment',
-	},
-];
+const steps = [{ label: 'Login' }, { label: 'Add Delivery Address' },{ label: 'Payment'	}];
 
 export default function VerticalLinearStepper({ openDrawer }) {
 	const [activeStep, setActiveStep] = useState(0);
 	const { Width, Height } = useWindowSize()
+	const user = useUser();
+	const { data, error, isLoading } = useGetAddressesQuery(user?.uid);
 
 	const handleNext = () => {
 		setActiveStep((prevActiveStep) => prevActiveStep + 1);

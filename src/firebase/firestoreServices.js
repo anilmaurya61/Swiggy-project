@@ -90,5 +90,26 @@ const updateMenuItem = async (updatedItemData) => {
     }
 };
 
+const addAddress = async (addressData) => {
+    try {
+        const userId = addressData.userId;  
+        const addressesRef = doc(db, "addresses", userId);
 
-export {deleteMenuItem , addMenuItem, updateMenuItem }
+        const addressesSnapshot = await getDoc(addressesRef);
+        const currentAddressData = addressesSnapshot.data();
+
+        const existingAddresses = currentAddressData?.addresses || [];
+
+        const updatedAddresses = [addressData, ...existingAddresses];
+
+        const updatedAddressData = { ...currentAddressData, addresses: updatedAddresses };
+
+        await setDoc(addressesRef, updatedAddressData);
+        console.log("Address is Stored successfully")
+    } catch (e) {
+        throw e;
+    }
+};
+
+
+export {deleteMenuItem , addMenuItem, updateMenuItem, addAddress }
