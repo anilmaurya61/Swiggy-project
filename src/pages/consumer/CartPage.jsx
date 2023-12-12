@@ -18,7 +18,7 @@ const CartPage = () => {
   });
 
   useEffect(() => {
-    if (cart.items.length == 0) {
+    if (cart?.items?.length == 0) {
       setCartEmpty(true);
     } else {
       setCartEmpty(false);
@@ -47,7 +47,7 @@ const CartPage = () => {
       <Cart />
       {!cartEmpty && (
         <Box sx={{ display: "flex", alignItems: "baseline", gap: "2rem" }}>
-          <CartStepper openDrawer={toggleDrawer} />
+          <Box sx={{width:'50%'}}><CartStepper  openDrawer={toggleDrawer} /></Box>
           <Box sx={{ marginTop: "1rem", backgroundColor: "#fff" }}>
             {cart &&
               cart.items.map((item) => (

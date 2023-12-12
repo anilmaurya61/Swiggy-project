@@ -12,7 +12,7 @@ const StyledCard = styled.div`
   gap: 0.3rem;
   transition: box-shadow 0.3s ease;
   overflow-wrap: break-word;
-  curser:pointer;
+  cursor: pointer;
 
   &:hover {
     box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.7);
