@@ -111,17 +111,8 @@ const CountItem = styled.div`
 `;
 
 
-const MenuItem = ({
-  addBtn,
-  restaurantId,
-  itemId,
-  itemName,
-  price,
-  description,
-  itemImage,
-  isVegetarian,
-}) => {
-  const dispatch = useDispatch();
+const MenuItem = ({ addBtn, restaurantId, itemId, itemName, price, description, itemImage, isVegetarian }) => {
+const dispatch = useDispatch();
   const [isPopupOpen, setPopupOpen] = useState(false);
   const cart = useSelector((state) => state.cart);
   const handleAddToCart = () => {

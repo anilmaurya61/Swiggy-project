@@ -22,8 +22,7 @@ const StyledLogo = styled.div`
   }
 `;
 
-const CartHeader = ({ prop }) => {
-
+const CartHeader = () => {
     return (
         <StyledNav>
             <StyledContainer>

@@ -5,7 +5,7 @@ import LandingPage from '../pages/consumer/LandingPage'
 import SearchPage from '../pages/consumer/SearchPage';
 import RestaurantPage from '../pages/consumer/RestaurantPage';
 import { UserProvider } from '../context/userContext';
-import CartPage from '../pages/consumer/cartPage';
+import CartPage from '../pages/consumer/CartPage';
 
 const Consumer = () => {
   return (

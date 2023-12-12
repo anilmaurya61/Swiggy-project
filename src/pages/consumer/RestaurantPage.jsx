@@ -7,6 +7,7 @@ import { useGetMenuItemQuery } from "../../firebase/firebaseRTKquery";
 import { getFirestore } from "firebase/firestore";
 import { useLocation } from "react-router-dom";
 import { Box } from "@mui/material";
+
 function RestaurantPage() {
   const { search } = useLocation();
   const params = new URLSearchParams(search);
