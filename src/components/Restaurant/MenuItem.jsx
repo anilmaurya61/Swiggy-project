@@ -50,8 +50,8 @@ const RightColumn = styled.div`
 `;
 
 const ItemImage = styled.img`
-  height: 100%;
-  width: 100%;
+  height: 150px;
+  width: 150px;
   border-radius: 4px;
 `;
 

@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 const Cart = styled.button`
-  height: 48px;
+  height: 58px;
   background: #60b246;
   color: #fff;
   z-index: 2;
@@ -17,9 +17,9 @@ const Cart = styled.button`
   outline: none;
   text-align: left;
   position: sticky;
-  bottom: 0;
+  bottom: 1px;
   left: 20%;
-  padding: 14px 30px;
+  padding: 20px 30px;
 `;
 const Span1 = styled.div`
   color: white;

@@ -94,6 +94,7 @@ export default function VerticalLinearStepper({ openDrawer }) {
 			setaddressData(data?.addresses[0])
 		}
 	}, [data])
+
 	const handleNext = () => {
 		setActiveStep((prevActiveStep) => prevActiveStep + 1);
 	};
