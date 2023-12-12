@@ -9,6 +9,7 @@ import image4 from "../../assets/SearchCuisines/Screenshot from 2023-12-10 10-49
 import image5 from "../../assets/SearchCuisines/Screenshot from 2023-12-10 10-49-16.png";
 import image6 from "../../assets/SearchCuisines/Screenshot from 2023-12-10 10-49-25.png";
 import { useGetAllRestaurantsQuery } from "../../firebase/firebaseRTKqueryRestaurants";
+
 const Container = styled.div`
   position: relative;
   padding-top: 80px;
