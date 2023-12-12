@@ -71,6 +71,10 @@ const HeaderComponent = ({ prop }) => {
     navigate("/");
   }
 
+  let totalCount=0;
+  if(cart!=undefined)
+    totalCount = cart.items.reduce((sum, item) => sum + item.count, 0);
+  
   return (
     <StyledNav>
       <StyledContainer className="container">
@@ -99,7 +103,7 @@ const HeaderComponent = ({ prop }) => {
             <Link to="/cart">
               <IconButton aria-label="cart">
                 <StyledBadge
-                  badgeContent={cart.items && cart.items.length}
+                  badgeContent={totalCount}
                   color="secondary"
                 >
                   <ShoppingCartIcon />
