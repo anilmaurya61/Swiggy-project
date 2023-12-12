@@ -8,7 +8,7 @@ import { menuItemsApi } from '../firebase/firebaseRTKquery';
 import restaurantDetailsReducer from '../feature/restaurant/RestaurantDetailsSlice';
 import { RestaurantsApi } from '../firebase/firebaseRTKqueryRestaurants';
 import cartReducer from '../feature/consumer/CartSlice';
-import { addressesApigit  } from '../firebase/getAddressRTKquery';
+import { addressesApi  } from '../firebase/getAddressRTKquery';
 
 const persistConfig = {
   key: 'root',
