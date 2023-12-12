@@ -8,7 +8,8 @@ import { useGetMenuItemQuery } from '../../firebase/firebaseRTKquery'
 import { addItems } from '../../feature/restaurant/RestaurantHomeSlice'
 import { getFirestore, collection, getDocs } from 'firebase/firestore';
 import { useUser } from '../../context/authContext';
-
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 const RestaurantHome = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
