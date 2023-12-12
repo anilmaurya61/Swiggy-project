@@ -10,7 +10,6 @@ const StyledCard = styled.div`
   display: flex;
   flex-direction: column;
   gap: 0.3rem;
-  box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.5);
   transition: box-shadow 0.3s ease;
   overflow-wrap: break-word;
   curser:pointer;

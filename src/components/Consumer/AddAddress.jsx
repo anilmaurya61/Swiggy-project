@@ -66,6 +66,7 @@ const AddAddress = () => {
             return;
         }       
         try {
+            
             await addAddress({'userId':user.uid, address, doorFlatNo, landmark, addressType})
         } catch (error) {
             console.log(error.message)
