@@ -86,11 +86,12 @@ const HeaderComponent = ({ prop }) => {
             </Link>
           </li>
           <li>
-            <IconButton aria-label="cart">
+            <Link to='/cart'><IconButton aria-label="cart">
               <StyledBadge badgeContent={1} color="secondary">
                 <ShoppingCartIcon />
               </StyledBadge>
             </IconButton>
+            </Link>
           </li>
           <li>
             {user && (

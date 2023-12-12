@@ -13,6 +13,7 @@ import HomeIcon from '@mui/icons-material/Home';
 import { useWindowSize } from 'react-use';
 import Confetti from 'react-confetti'
 import { Link } from 'react-router-dom';
+import confirmOrder from '../../assets/orderConfirmed.gif'
 
 
 
@@ -75,6 +76,17 @@ const AddAddress = styled.div`
 	margin:1rem;
 	padding: 1rem;
 `
+const popupStyle = {
+	position: 'fixed',
+	top: '50%',
+	left: '50%',
+	transform: 'translate(-50%, -50%)',
+	backgroundColor: 'white',
+	padding: '20px',
+	borderRadius: '8px',
+	boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.2)',
+};
+
 const steps = [
 	{
 		label: 'Login',
@@ -169,18 +181,20 @@ export default function VerticalLinearStepper({ openDrawer }) {
 				))}
 			</Stepper>
 			{activeStep === steps.length && (
-				<Paper square elevation={0} sx={{ p: 3 }}>
-					<Typography>Thank you for Your Order</Typography>
-					<Link to='/'>
-					<Button variant='outlined'>
-						Back to Home
-					</Button>
-					</Link>
+				<>
+					<Box sx={popupStyle}>
+						<img src={confirmOrder} alt="" />
+						<Link to='/'>
+							<Button variant='outlined'>
+								Back to Home
+							</Button>
+						</Link>
+					</Box>
 					<Confetti
 						width={Width}
 						height={Height}
 					/>
-				</Paper>
+				</>
 			)}
 		</Box>
 	);
