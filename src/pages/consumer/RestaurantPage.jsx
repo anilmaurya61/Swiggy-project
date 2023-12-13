@@ -20,8 +20,8 @@ function RestaurantPage() {
   const items = menuItem?.items;
 
   const filteredItems = items?.filter((item) =>
-    isVegOnly ? item.isVegetarian : !item.isVegetarian
-  );
+  isVegOnly ? item.isVegetarian : true
+);
 
   return (
     <>
