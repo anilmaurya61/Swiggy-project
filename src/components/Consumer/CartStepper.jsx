@@ -14,7 +14,8 @@ import { Link } from 'react-router-dom';
 import confirmOrder from '../../assets/orderConfirmed.gif'
 import { useUser } from '../../context/authContext';
 import { useGetAddressesQuery } from '../../firebase/getAddressRTKquery'
-
+import { useDispatch } from 'react-redux';
+import { clearCart } from '../../feature/consumer/CartSlice';
 const StyledLoginContainer = styled(Box)`
   height: 10rem;
   margin-left: 25px;
@@ -93,6 +94,7 @@ const overlayStyle = {
 const steps = [{ label: 'Login' }, { label: 'Add Delivery Address' }, { label: 'Payment' }];
 
 export default function VerticalLinearStepper({ openDrawer }) {
+	const dispatch=useDispatch();
 	const [activeStep, setActiveStep] = useState(0);
 	const [addressData, setaddressData] = useState([]);
 	const { Width, Height } = useWindowSize()
@@ -104,10 +106,19 @@ export default function VerticalLinearStepper({ openDrawer }) {
 			setaddressData(data?.addresses[0])
 		}
 	}, [data])
-
+	
 	const handleNext = () => {
 		setActiveStep((prevActiveStep) => prevActiveStep + 1);
+
 	};
+	const handleOrder = () => {
+		setActiveStep((prevActiveStep) => prevActiveStep + 1);
+		
+	};
+
+	const handleClearCart = () => {
+		dispatch(clearCart());
+	  };
 
 	const handleBack = () => {
 		setActiveStep((prevActiveStep) => prevActiveStep - 1);
@@ -198,7 +209,7 @@ export default function VerticalLinearStepper({ openDrawer }) {
 										<>
 											<Button
 												variant="outlined"
-												onClick={handleNext}
+												onClick={handleOrder}
 												sx={{
 													mt: 1,
 													mr: 1,
@@ -229,7 +240,7 @@ export default function VerticalLinearStepper({ openDrawer }) {
 			{activeStep === steps.length && (
 				<>
 					<Box sx={overlayStyle}>
-						<Box sx={popupStyle}>
+						<Box sx={popupStyle} onClick={handleClearCart}>
 							<img src={confirmOrder} alt="" />
 							<Link to='/'>
 								<Button variant='outlined'>
