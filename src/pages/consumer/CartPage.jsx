@@ -62,7 +62,7 @@ const CartPage = () => {
                 alignItems: "center",
               }}
             >
-              <h2>PAY</h2> <h2>₹ {totalSum}</h2>
+              <h2>PAY</h2> <h2>₹ {totalSum.toFixed(2)}</h2>
             </Box>
           </Box>
         </Box>
