@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import {Link} from 'react-router-dom'
 
 
 const StyledNav = styled.nav`
@@ -27,7 +28,7 @@ const CartHeader = () => {
         <StyledNav>
             <StyledContainer>
                 <StyledLogo>
-                    <img src="https://cdn.worldvectorlogo.com/logos/swiggy-1.svg" alt="" />
+                    <Link to='/'><img src="https://cdn.worldvectorlogo.com/logos/swiggy-1.svg" alt="swiggy logo" /></Link>
                 </StyledLogo>
                 <span style={{ fontWeight: '700', color: '#3d4152', textTransform: 'uppercase'}}>SECURE CHECKOUT</span>
             </StyledContainer>
