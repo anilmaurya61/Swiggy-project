@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import veg from "../../assets/veg-icon.png";
+import nonVeg from "../../assets/non-veg.png";
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import {
@@ -59,7 +60,6 @@ const VegetarianLabel = styled.img`
   margin-top: 8px;
   width: 15px;
   height: auto;
-  filter: ${(props) => (props.isVegetarian ? "none" : "hue-rotate(120deg)")};
 `;
 
 
@@ -110,8 +110,7 @@ const ReviewCart = ({
       <MenuItemWrapper style={{ width: "40vw" }}>
         <LeftColumn>
           <VegetarianLabel
-            isVegetarian={!isVegetarian}
-            src={veg}
+            src={isVegetarian?veg:nonVeg}
             alt="Vegetarian"
           />
           <ItemName>{itemName}</ItemName>

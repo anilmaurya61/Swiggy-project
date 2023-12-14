@@ -9,7 +9,7 @@ import { RestaurantsApi } from '../firebase/firebaseRTKqueryRestaurants';
 import cartReducer from '../feature/consumer/CartSlice';
 import { addressesApi  } from '../firebase/getAddressRTKquery';
 import showRemoveItemReducer from  '../feature/restaurant/DeleteItemSlice';
-
+import filtersReducer from "../feature/consumer/filterSlice";
 const persistConfig = {
   key: 'root',
   storage,
@@ -25,6 +25,7 @@ export const rootReducer = combineReducers({
   [addressesApi.reducerPath]: addressesApi.reducer,
   cart: cartReducer,
   showRemoveItem:showRemoveItemReducer,
+  filters:filtersReducer,
 });
 
 export const persistedReducer = persistReducer(persistConfig, rootReducer);

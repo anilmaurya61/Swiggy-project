@@ -3,7 +3,10 @@ import { Search as SearchIcon } from "@mui/icons-material";
 import StarIcon from "@mui/icons-material/Star";
 import DirectionsBikeIcon from "@mui/icons-material/DirectionsBike";
 import Checkbox from "@mui/material/Checkbox";
-import { useLocation } from 'react-router-dom';
+import { useLocation } from "react-router-dom";
+import { useDispatch, useSelector } from 'react-redux';
+import { toggleVegFilter, selectVegFilter } from "../../feature/consumer/filterSlice"
+
 const Container1 = styled.div`
   max-width: 62%;
   margin: 16px auto;
@@ -33,12 +36,11 @@ const Top1 = styled.div`
 `;
 const Span1 = styled.span`
   color: #7e808c;
-  font-size:small;
+  font-size: small;
 `;
 const Span = styled.span`
-  font-size:small;
+  font-size: small;
 `;
-
 
 const FlexDiv = styled.div`
   display: flex;
@@ -100,10 +102,17 @@ const VegContainer = styled.div`
 const RestaurantMenu = () => {
   const { search } = useLocation();
   const params = new URLSearchParams(search);
-  const name= params.get("name");
+  const name = params.get("name");
+
+  const dispatch = useDispatch();
   const cuisines = params.get("cuisines");
   const location = params.get("location");
+  const isVegOnly = useSelector(selectVegFilter);
 
+  const handleVegFilterToggle = () => {
+    dispatch(toggleVegFilter());
+
+  };
   return (
     <div>
       <Container1>
@@ -138,7 +147,12 @@ const RestaurantMenu = () => {
         <hr style={{ color: "lightgray", borderStyle: "dashed" }}></hr>
         <VegContainer>
           <span>Veg Only</span>
-          <Checkbox defaultChecked color="success" />
+          <Checkbox
+            defaultChecked
+            color="success"
+            checked={isVegOnly}
+            onChange={handleVegFilterToggle}
+          />
         </VegContainer>
       </Container1>
     </div>
