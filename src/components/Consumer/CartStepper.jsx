@@ -15,6 +15,7 @@ import confirmOrder from '../../assets/orderConfirmed.gif'
 import { useUser } from '../../context/authContext';
 import { useGetAddressesQuery } from '../../firebase/getAddressRTKquery'
 import { clearCart } from '../../feature/consumer/CartSlice';
+import { setUserAddress } from '../../feature/consumer/CartSlice';
 import { useDispatch, useSelector } from "react-redux";
 import { toggleDrawer } from '../../feature/consumer/addAddressSlice'
 
@@ -98,14 +99,15 @@ const steps = [{ label: 'Login' }, { label: 'Add Delivery Address' }, { label: '
 export default function VerticalLinearStepper() {
 	const dispatch = useDispatch();
 	const [activeStep, setActiveStep] = useState(0);
-	const [addressData, setaddressData] = useState([]);
 	const { Width, Height } = useWindowSize()
 	const user = useUser();
 	const { data, error, isLoading } = useGetAddressesQuery(user?.uid);
+    const addressData = useSelector((state) => state.cart.userAddress);
+	console.log(addressData);
 
 	useEffect(() => {
 		if (!isLoading) {
-			setaddressData(data?.addresses[0])
+			dispatch(setUserAddress(data?.addresses[0]))
 		}
 	}, [data])
 

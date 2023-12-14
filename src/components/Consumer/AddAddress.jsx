@@ -11,9 +11,9 @@ import {Home as HomeIcon,
 import { useUser } from '../../context/authContext';
 import { addAddress } from '../../firebase/firestoreServices'
 import { LoadingButton } from '@mui/lab';
-import { toggleDrawer } from '../../feature/consumer/addAddressSlice'
+import { setUserAddress } from '../../feature/consumer/CartSlice';
 import { useDispatch } from 'react-redux';
-
+import { toggleDrawer } from '../../feature/consumer/addAddressSlice'
 
 const Wrapper = styled.div`
   margin-top: 5rem;
@@ -29,7 +29,7 @@ const Container = styled.div`
   width: 30rem;
 `;
 
-const AddAddress = () => {
+const AddAddress = ({ onClose }) => {
     const auth = getAuth(app);
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -74,6 +74,8 @@ const AddAddress = () => {
         try {
             setLoading(true);
             await addAddress({'userId':user.uid, address, doorFlatNo, landmark, addressType})
+            const add={'userId':user.uid, address, doorFlatNo, landmark, addressType}
+            dispatch(setUserAddress(add));
             setLoading(false)
             dispatch(toggleDrawer());
         } catch (error) {
