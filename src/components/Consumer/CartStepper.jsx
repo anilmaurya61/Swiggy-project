@@ -14,8 +14,9 @@ import { Link } from 'react-router-dom';
 import confirmOrder from '../../assets/orderConfirmed.gif'
 import { useUser } from '../../context/authContext';
 import { useGetAddressesQuery } from '../../firebase/getAddressRTKquery'
-import { useDispatch } from 'react-redux';
+import { useDispatch,useSelector } from 'react-redux';
 import { clearCart } from '../../feature/consumer/CartSlice';
+import { setUserAddress } from '../../feature/consumer/CartSlice';
 const StyledLoginContainer = styled(Box)`
   height: 10rem;
   margin-left: 25px;
@@ -96,14 +97,15 @@ const steps = [{ label: 'Login' }, { label: 'Add Delivery Address' }, { label: '
 export default function VerticalLinearStepper({ openDrawer }) {
 	const dispatch=useDispatch();
 	const [activeStep, setActiveStep] = useState(0);
-	const [addressData, setaddressData] = useState([]);
 	const { Width, Height } = useWindowSize()
 	const user = useUser();
 	const { data, error, isLoading } = useGetAddressesQuery(user?.uid);
-	console.log(isLoading, data?.addresses[data?.addresses.length - 1])
+    const addressData = useSelector((state) => state.cart.userAddress);
+	console.log(addressData);
+
 	useEffect(() => {
 		if (!isLoading) {
-			setaddressData(data?.addresses[0])
+			dispatch(setUserAddress(data?.addresses[0]))
 		}
 	}, [data])
 	

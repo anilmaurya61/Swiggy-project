@@ -11,6 +11,8 @@ import {Home as HomeIcon,
 import { useUser } from '../../context/authContext';
 import { addAddress } from '../../firebase/firestoreServices'
 import { LoadingButton } from '@mui/lab';
+import { setUserAddress } from '../../feature/consumer/CartSlice';
+import { useDispatch } from 'react-redux';
 
 const Wrapper = styled.div`
   margin-top: 5rem;
@@ -27,6 +29,7 @@ const Container = styled.div`
 `;
 
 const AddAddress = ({ onClose }) => {
+    const dispatch=useDispatch();
     const auth = getAuth(app);
     const navigate = useNavigate();
     const user = useUser();
@@ -70,6 +73,8 @@ const AddAddress = ({ onClose }) => {
         try {
             setLoading(true);
             await addAddress({'userId':user.uid, address, doorFlatNo, landmark, addressType})
+            const add={'userId':user.uid, address, doorFlatNo, landmark, addressType}
+            dispatch(setUserAddress(add));
             setLoading(false)
         } catch (error) {
             console.log(error.message)
