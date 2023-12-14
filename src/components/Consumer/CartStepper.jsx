@@ -14,9 +14,11 @@ import { Link } from 'react-router-dom';
 import confirmOrder from '../../assets/orderConfirmed.gif'
 import { useUser } from '../../context/authContext';
 import { useGetAddressesQuery } from '../../firebase/getAddressRTKquery'
-import { useDispatch,useSelector } from 'react-redux';
 import { clearCart } from '../../feature/consumer/CartSlice';
 import { setUserAddress } from '../../feature/consumer/CartSlice';
+import { useDispatch, useSelector } from "react-redux";
+import { toggleDrawer } from '../../feature/consumer/addAddressSlice'
+
 const StyledLoginContainer = styled(Box)`
   height: 10rem;
   margin-left: 25px;
@@ -94,8 +96,8 @@ const overlayStyle = {
 
 const steps = [{ label: 'Login' }, { label: 'Add Delivery Address' }, { label: 'Payment' }];
 
-export default function VerticalLinearStepper({ openDrawer }) {
-	const dispatch=useDispatch();
+export default function VerticalLinearStepper() {
+	const dispatch = useDispatch();
 	const [activeStep, setActiveStep] = useState(0);
 	const { Width, Height } = useWindowSize()
 	const user = useUser();
@@ -108,19 +110,23 @@ export default function VerticalLinearStepper({ openDrawer }) {
 			dispatch(setUserAddress(data?.addresses[0]))
 		}
 	}, [data])
-	
+
+	const openDrawer = () => {
+		dispatch(toggleDrawer());
+	};
+
 	const handleNext = () => {
 		setActiveStep((prevActiveStep) => prevActiveStep + 1);
 
 	};
 	const handleOrder = () => {
 		setActiveStep((prevActiveStep) => prevActiveStep + 1);
-		
+
 	};
 
 	const handleClearCart = () => {
 		dispatch(clearCart());
-	  };
+	};
 
 	const handleBack = () => {
 		setActiveStep((prevActiveStep) => prevActiveStep - 1);
@@ -153,7 +159,7 @@ export default function VerticalLinearStepper({ openDrawer }) {
 														<CheckCircleRoundedIcon style={{ color: 'green' }} />
 													</Online>
 													<Info>{user?.displayName} | {user?.email}</Info>
-													<Button sx={{marginTop:'1rem'}} onClick={handleNext} variant='outlined'>Continue</Button>
+													<Button sx={{ marginTop: '1rem' }} onClick={handleNext} variant='outlined'>Continue</Button>
 												</StyledLoginContent>
 											) : (
 												<Box sx={{ display: 'flex', alignItems: 'center', gap: '2rem' }}>
@@ -179,7 +185,7 @@ export default function VerticalLinearStepper({ openDrawer }) {
 													(
 														<>
 															<Button
-																onClick={openDrawer('right', true)}
+																onClick={() => openDrawer()}
 																variant='outlined'
 																color="success"
 															>
@@ -199,7 +205,7 @@ export default function VerticalLinearStepper({ openDrawer }) {
 
 															<p>{addressData?.doorFlatNo}, {addressData?.address}, {addressData?.landmark}</p>
 															<Button sx={{ marginRight: '1rem' }} onClick={handleNext} color='success' variant='contained'>Deliver Here</Button>
-															<Button onClick={openDrawer('right', true)} variant='outlined' color="success">ADD NEW</Button>
+															<Button onClick={()=>openDrawer()} variant='outlined' color="success">ADD NEW</Button>
 														</Box>
 													</Box>)
 											)}

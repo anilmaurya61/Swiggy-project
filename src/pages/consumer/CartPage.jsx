@@ -9,13 +9,10 @@ import { useSelector } from "react-redux";
 
 const CartPage = () => {
   const cart = useSelector((state) => state.cart);
+  const isOpenDrawer = useSelector((state)=> state.drawer.isOpen);
   const [cartEmpty, setCartEmpty] = useState(false);
-  const [state, setState] = useState({
-    top: false,
-    left: false,
-    bottom: false,
-    right: false,
-  });
+
+  console.log("isOpen", isOpenDrawer);
 
   useEffect(() => {
     if (cart?.items?.length == 0) {
@@ -24,17 +21,6 @@ const CartPage = () => {
       setCartEmpty(false);
     }
   }, [cart]);
-  const toggleDrawer = (anchor, open) => (event) => {
-    if (
-      event &&
-      event.type === "keydown" &&
-      (event.key === "Tab" || event.key === "Shift")
-    ) {
-      return;
-    }
-
-    setState({ ...state, [anchor]: open });
-  };
 
   let totalSum = 0;
   if (cart.items != undefined)
@@ -47,7 +33,7 @@ const CartPage = () => {
       <Cart />
       {!cartEmpty && (
         <Box sx={{ display: "flex", alignItems: "baseline", gap: "2rem" }}>
-          <Box sx={{width:'50%'}}><CartStepper  openDrawer={toggleDrawer} /></Box>
+          <Box sx={{width:'50%'}}><CartStepper/></Box>
           <Box sx={{ marginTop: "1rem", backgroundColor: "#fff" }}>
             {cart &&
               cart.items.map((item) => (
@@ -72,9 +58,7 @@ const CartPage = () => {
 
       <AddAddress
         anchor="right"
-        isOpen={state["right"]}
-        onClose={toggleDrawer("right", false)}
-        onOpen={toggleDrawer("right", true)}
+        isOpen={isOpenDrawer}
       />
     </Box>
   );

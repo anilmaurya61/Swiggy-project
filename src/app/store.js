@@ -10,6 +10,8 @@ import cartReducer from '../feature/consumer/CartSlice';
 import { addressesApi  } from '../firebase/getAddressRTKquery';
 import showRemoveItemReducer from  '../feature/restaurant/DeleteItemSlice';
 import filtersReducer from "../feature/consumer/filterSlice";
+import drawerReducer from '../feature/consumer/addAddressSlice';
+
 const persistConfig = {
   key: 'root',
   storage,
@@ -26,6 +28,7 @@ export const rootReducer = combineReducers({
   cart: cartReducer,
   showRemoveItem:showRemoveItemReducer,
   filters:filtersReducer,
+  drawer: drawerReducer,
 });
 
 export const persistedReducer = persistReducer(persistConfig, rootReducer);

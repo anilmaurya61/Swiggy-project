@@ -1,15 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Pagination from '@mui/material/Pagination';
-import Stack from '@mui/material/Stack';
+import { Stack, Button } from '@mui/material';
 import AllOrders from './order.json';
 import { useDispatch, useSelector } from 'react-redux';
+import OrderDetails from './OrderDetails';
 import {
-    setOrders,
-    setSelectedStatus,
-    setSelectedOrderId,
-    setCurrentPage,
-    handleStatusChange,
+  setOrders,
+  setSelectedOrderId,
+  setCurrentPage,
 } from '../../feature/restaurant/RestaurantHomeSlice';
 
 const OrdersContainer = styled.div`
@@ -53,63 +52,69 @@ const PaginationContainer = styled.div`
 `;
 
 const OrdersComponent = () => {
-    const dispatch = useDispatch();
-    const { orders, selectedStatus, selectedOrderId, currentPage, pageSize} = useSelector((state) => state.Orders);
+  const dispatch = useDispatch();
+  const [isOpenDetails, setOpenDetails] = useState(false);
 
-    useEffect(() => {
-        dispatch(setOrders(AllOrders));
-    }, []);
+  const { orders, selectedStatus, selectedOrderId, currentPage, pageSize } = useSelector((state) => state.Orders);
 
-    const totalPages = Math.ceil(orders.length / pageSize);
+  useEffect(() => {
+    dispatch(setOrders(AllOrders));
+  }, []);
 
-    const handlePageChange = (event, newPage) => {
-        dispatch(setCurrentPage(newPage));
-        dispatch(setSelectedOrderId(null));
-    };
+  const totalPages = Math.ceil(orders.length / pageSize);
 
-    const handleStatusChange = (orderId, newStatus) => {
-        dispatch(setSelectedOrderId(orderId));
-        dispatch(setSelectedStatus(newStatus));
-    };
+  const handlePageChange = (event, newPage) => {
+    dispatch(setCurrentPage(newPage));
+    dispatch(setSelectedOrderId(null));
+  };
 
-    const startIndex = (currentPage - 1) * pageSize;
-    const visibleOrders = orders.slice(startIndex, startIndex + pageSize);
+  const handleView = () => {
+    setOpenDetails(!isOpenDetails)
+  }
 
-    return (
-        <OrdersContainer>
-            <OrdersTable>
-                <thead>
-                    <tr>
-                        <TableHeader>Order ID</TableHeader>
-                        <TableHeader>Address</TableHeader>
-                        <TableHeader>Timestamp</TableHeader>
-                    </tr>
-                </thead>
-                <tbody>
-                    {visibleOrders.map((order) => (
-                        <TableRow key={order.orderId}>
-                            <TableCell>{order.orderId}</TableCell>
-                            <TableCell>{order.address}</TableCell>
-                            <TableCell>{order.timestamp}</TableCell>
-                        </TableRow>
-                    ))}
-                </tbody>
-            </OrdersTable>
+  const startIndex = (currentPage - 1) * pageSize;
+  const visibleOrders = orders.slice(startIndex, startIndex + pageSize);
 
-            <PaginationContainer>
-                <Stack spacing={2}>
-                    <Pagination
-                        count={totalPages}
-                        page={currentPage}
-                        onChange={handlePageChange}
-                        variant="outlined"
-                        shape="rounded"
-                        color="secondary"
-                    />
-                </Stack>
-            </PaginationContainer>
-        </OrdersContainer>
-    );
+  return (
+    <>
+    {isOpenDetails && <OrderDetails onClose={handleView}/>}
+      <OrdersContainer>
+        <OrdersTable>
+          <thead>
+            <tr>
+              <TableHeader>Order ID</TableHeader>
+              <TableHeader>Address</TableHeader>
+              <TableHeader>Timestamp</TableHeader>
+              <TableHeader>Order Details</TableHeader>
+            </tr>
+          </thead>
+          <tbody>
+            {visibleOrders.map((order) => (
+              <TableRow key={order.orderId}>
+                <TableCell>{order.orderId}</TableCell>
+                <TableCell>{order.address}</TableCell>
+                <TableCell>{order.timestamp}</TableCell>
+                <TableCell><Button variant='contained' onClick={handleView}>View</Button></TableCell>
+              </TableRow>
+            ))}
+          </tbody>
+        </OrdersTable>
+
+        <PaginationContainer>
+          <Stack spacing={2}>
+            <Pagination
+              count={totalPages}
+              page={currentPage}
+              onChange={handlePageChange}
+              variant="outlined"
+              shape="rounded"
+              color="secondary"
+            />
+          </Stack>
+        </PaginationContainer>
+      </OrdersContainer>
+    </>
+  );
 };
 
 export default OrdersComponent;
