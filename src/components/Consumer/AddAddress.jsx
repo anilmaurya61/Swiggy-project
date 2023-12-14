@@ -11,6 +11,9 @@ import {Home as HomeIcon,
 import { useUser } from '../../context/authContext';
 import { addAddress } from '../../firebase/firestoreServices'
 import { LoadingButton } from '@mui/lab';
+import { toggleDrawer } from '../../feature/consumer/addAddressSlice'
+import { useDispatch } from 'react-redux';
+
 
 const Wrapper = styled.div`
   margin-top: 5rem;
@@ -26,9 +29,10 @@ const Container = styled.div`
   width: 30rem;
 `;
 
-const AddAddress = ({ onClose }) => {
+const AddAddress = () => {
     const auth = getAuth(app);
     const navigate = useNavigate();
+    const dispatch = useDispatch();
     const user = useUser();
     const [address, setAddress] = useState('');
     const [doorFlatNo, setDoorFlatNo] = useState('');
@@ -71,6 +75,7 @@ const AddAddress = ({ onClose }) => {
             setLoading(true);
             await addAddress({'userId':user.uid, address, doorFlatNo, landmark, addressType})
             setLoading(false)
+            dispatch(toggleDrawer());
         } catch (error) {
             console.log(error.message)
         }
@@ -122,9 +127,11 @@ const AddAddress = ({ onClose }) => {
                     <Grid container spacing={1} sx={{ marginTop: '1rem', marginLeft: 0, border: '1px solid gray', height: '60px', width: '100%' }}>
                         <Grid onClick={() => setAddressType('home')} item xs={4} sx={{
                             borderRight: '1px solid grey', display: 'flex', alignItems: 'center', justifyContent: 'center', '&:hover': {
-                                background: 'black',
+                                background: '#68686b',
                                 color: 'white',
                             },
+                            backgroundColor:addressType == 'home' ? 'black': 'white',
+                            color:addressType == 'home' ? 'white' : 'black',
                         }}>
                             <Box sx={{ display: 'flex', alignItems: 'center' }}>
                                 <HomeIcon />
@@ -133,9 +140,11 @@ const AddAddress = ({ onClose }) => {
                         </Grid>
                         <Grid onClick={() => setAddressType('work')} item xs={4} sx={{
                             borderRight: '1px solid grey', display: 'flex', alignItems: 'center', justifyContent: 'center', '&:hover': {
-                                background: 'black',
+                                background: '#68686b',
                                 color: 'white',
                             },
+                            backgroundColor:addressType == 'work' ? 'black': 'white',
+                            color:addressType == 'work' ? 'white' : 'black',
                         }}>
                             <Box sx={{ display: 'flex', alignItems: 'center' }}>
                                 <WorkOutlineIcon />
@@ -144,9 +153,11 @@ const AddAddress = ({ onClose }) => {
                         </Grid>
                         <Grid onClick={() => setAddressType('other')} item xs={4} sx={{
                             display: 'flex', alignItems: 'center', justifyContent: 'center', '&:hover': {
-                                background: 'black',
+                                background: '#68686b',
                                 color: 'white',
                             },
+                            backgroundColor: addressType == 'other' ? 'black': 'white',
+                            color: addressType == 'other' ? 'white' : 'black',
                         }}>
                             <Box sx={{ display: 'flex', alignItems: 'center' }}>
                                 <LocationOnOutlinedIcon />
@@ -172,7 +183,7 @@ const AddAddress = ({ onClose }) => {
 const DrawerComponent = ({ anchor, isOpen, onClose, onOpen }) => {
     return (
         <SwipeableDrawer anchor={anchor} open={isOpen} onClose={onClose} onOpen={onOpen}>
-            <AddAddress  onClose ={ onClose }/>
+            <AddAddress />
         </SwipeableDrawer>
     );
 };
